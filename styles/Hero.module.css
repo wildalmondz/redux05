@@ -1,0 +1,49 @@
+.hero {
+  width: 100%;
+  margin-top: 1em;
+  min-height: 300px;
+  text-align: center;
+  background-color: black;
+  background-image: url('https://images.pexels.com/photos/290316/pexels-photo-290316.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940');
+  background-size: cover;
+  background-position: center;
+}
+
+.bigimage {
+  height: 40vw;
+  width: 100vw;
+  position: relative;
+  background-size: cover;
+  background-position: 50% 50%;
+  background-image: url('https://wildalmonds.com/api/uploads/560b853f-f975-4665-811b-1e637f84d1a4_mummNapa.jpg');
+}
+
+.overlay {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.65);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+#heroArticle {
+  position: relative;
+  width: 90%;
+  min-width: 300px;
+  max-height: 500px;
+  margin: 10px auto 20px;
+  text-align: center;
+}
+
+.section hero h1 {
+  color: steelblue;
+  text-transform: uppercase;
+  margin: 0 auto .5rem;
+  padding: 0;
+}

@@ -1,0 +1,264 @@
+.blogcontainer {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    color: red;
+    background-color: black;
+}
+
+.blog-title {
+    font-family: 'Merriweather';
+    padding-top: 0;
+    padding-left: 0;
+}
+
+
+.containerBlogpath {
+    background-color: white;
+    padding: 0;
+    border: 2px solid black;
+    margin: 0;
+
+
+    h1 {
+        text-align: center;
+        padding: .5em;
+        flex-basis: calc(100% - 1em);
+    }
+
+    #boxes {
+        content: "";
+        clear: both;
+        background-color: black;
+        height: 20em;
+        display: flex;
+        justify-content: space-between;
+        margin: 0;
+
+    #squareonly {
+        backgroundColor: 'black';
+        backgroundPosition: 'center';
+        backgroundSize: 'contain';
+        backgroundRepeat: 'no-repeat';
+        font-size: larger;
+        background-color: white;
+        color: black;
+        line-height: 1em;
+        overflow: scroll;
+        box-sizing: border-box;
+        flex-basis: 49.5%;
+
+            div[id="blogcontainer"] {
+                width: 100%;
+                height: 100%;
+                position: relative;
+                display: flex;
+            }
+
+            div[id="toppath"] {
+                width: 100%;
+                height: 100%;
+                position: absolute;
+                top: 0;
+                left: 0;
+
+                h3 {
+                    font-size: 25px;
+                    color: white;
+                }
+            }
+
+div[id="toggleleft"] {
+    padding-left: 1em;
+    flex-basis: 5%;
+    pointer-events: all;
+}
+
+div[id="toggleright"] {
+    padding-right: 1em;
+    flex-basis: 5%;
+    pointer-events: all;
+}
+
+div[id="bottompath"] {
+    color: black;
+    background-color: white;
+    overflow: hidden;
+    padding-top: 80px;
+}
+
+div[id="pathbuttons"] {
+    flex: 0 50%;
+    box-sizing: border-box;
+}
+
+button[id="pathbutton"] {
+    color: #4F81B2;
+    background-color: white;
+    border-width: thin;
+    border-color: #4F81B2;
+    width: 5em;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+section[id="imagesection"] {
+p[id="name"] {
+    text-align: left;
+}
+
+figure[id="squareimage"] {
+    float: right;
+    width: fit-content;
+    height: fit-content;
+    background-repeat: no-repeat;
+    background-position: center;
+    padding-right: 20px;
+}
+
+figcaption {
+    font-size: 16px;
+    color: cornsilk;
+    font-style: italic;
+}
+
+img[id="squareimg"] {
+    width: 70px;
+    height: 70px;
+    text-align: right;
+    width: auto;
+}
+}
+
+section[id="detailsection"] {
+li[id="linkurl"] {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+}
+}
+}
+}
+div {
+li {
+    margin: 10px 0;
+    font-size: smaller;
+}
+ul {
+    padding-left: 5px;
+    color: black;
+    line-height: .5em;
+}
+ul[id="name"] {
+    color: black;
+    list-style: square outside none;
+    line-height: .5em;
+    text-align: center;
+    text-decoration: underline;
+    font-weight: bold;
+    font-size: medium;
+}
+ul[id="description"] {
+    color: black;
+    margin: 10px 0;
+    line-height: 1.25em;
+}
+ul[id="link"] {
+    color: blue;
+    text-decoration: underline;
+    margin: 10px 0;
+    font-size: small;
+    padding-left: 12px;
+}
+}
+#column1 {
+    background-color: floralwhite;
+    color: royalblue;
+    line-height: 1em;
+    width: 57%;
+    height: 163px;
+    overflow: scroll;
+}
+#column2 {
+    background-color: darkolivegreen;
+    color: seashell;
+    width: 43%;
+    height: 163px;
+    overflow: scroll;
+}
+#ads {
+    font-size: larger;
+    background-color: darkgreen;
+    color: black;
+    width: 50%;
+    padding-top: .5em;
+    line-height: 1em;
+    overflow: scroll;
+
+section[id="imagesection"] {
+p[id="name"] {
+    text-align: left;
+}
+
+figure[id="squareimage"] {
+    float: right;
+    width: fit-content;
+    height: fit-content;
+    margin: -5px;
+    border: 3px solid darkgrey;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+figcaption {
+    font-size: 12px;
+    color: cornsilk;
+    font-style: italic;
+}
+
+img[id="squareimg"] {
+    height: 70px;
+    text-align: right;
+    width: auto;
+}
+}
+section[id="detailsection"] {
+li[id="linkurl"] {
+    color: blue;
+    text-decoration: underline;
+    font-size: 14px
+}
+}
+}
+}
+
+.squareonly {
+    backgroundColor: 'black';
+    backgroundPosition: 'center';
+    backgroundSize: 'contain';
+    backgroundRepeat: 'no-repeat';
+    line-height: 1em;
+    overflow: scroll;
+    box-sizing: border-box;
+    flex-basis: 49.5%;
+}
+
+.boxes {
+    height: 120px;
+    #squareonly {
+        line-height: .5em;
+
+        div[id="toppath"] {
+            div[id="blog-title"] {
+                font-family: 'Merriweather';
+                padding-top: 0;
+                padding-left: 0;
+
+                h3 {
+                    font-size: 12px;
+                    color: red;
+                }
+            }
+        }
+    }
+}

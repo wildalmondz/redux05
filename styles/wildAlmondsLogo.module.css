@@ -1,0 +1,12 @@
+.logo {
+    width: 100%;
+    margin-top: 1em;
+    min-height: 500px;
+    max-height: 20em;
+    max-width: 20em;
+    text-align: center;
+    background-color: black;
+    background-image: url('https://wildalmonds.com/api/uploads/1b1dd9d1-67b9-45a6-9410-b063303c0b92_wildAlmondsLogo.jpeg');
+    background-size: cover;
+    background-position: center;
+}

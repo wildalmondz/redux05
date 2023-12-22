@@ -1,0 +1,54 @@
+.newsletter {
+  height: 150px;
+  margin: 0 auto;
+  padding: 50px;
+  display: table;
+  flex-wrap: wrap;
+  position: relative;
+  color: antiquewhite;
+}
+
+#newsletter #rcaptcha {
+  position: relative;
+  width: 100%;
+  display: grid;
+  color: indianred;
+  font-weight: bold;
+  background-color: green;
+}
+
+#newsletter input[type="email"] {
+  margin: 8px;
+  display: block;
+  border: 1px solid #bbb;
+  color: #515151;
+  outline: 0;
+  padding: 6px;
+  font-size: 1.1em;
+  width: 100%;
+  border-radius: 4px;
+  /* background: url('../src/components/ui/images/almonds/email.png') no-repeat 10px 8px; */
+  background-size: 16px 16px;
+  background-color: white;
+  padding-left: 32px;
+}
+
+#newsletter #messageboard {
+  position: relative;
+  width: 100%;
+  display: grid;
+  color: indianred;
+}
+
+.logo {
+  width: 100%;
+  margin-top: 1em;
+  min-height: 500px;
+  max-height: 20em;
+  max-width: 20em;
+  text-align: center;
+  background-color: black;
+  background-image: url('https://wildalmonds.com/api/uploads/1b1dd9d1-67b9-45a6-9410-b063303c0b92_wildAlmondsLogo.jpeg');
+  background-size: cover;
+  background-position: center;
+}
