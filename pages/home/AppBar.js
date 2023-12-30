@@ -8,6 +8,7 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import { useRouter } from 'next/router';
+import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
@@ -25,7 +26,6 @@ import NavBar from '../../comps/NavBar'
 import Profile from '../user/profile';
 import MessageBoard from '../home/MessageBoard';
 // import CounterComponent from '../test/CounterComponent';
-
 import { useProfileData, fetchUserProfile } from "../user/profileUtils";
 import IsLoggedIn from '../user/isloggedin';
 import axios from "axios";
@@ -85,6 +85,7 @@ export default function PrimarySearchAppBar() {
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+    const [searchText, setSearchText] = React.useState('');
 
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -112,6 +113,10 @@ export default function PrimarySearchAppBar() {
         await router.push('/user/login');
         handleMenuClose();
 
+    };
+
+    const handleSearch = () => {
+        alert(`You searched for: ${searchText}`);
     };
 
     if (username) {
@@ -276,10 +281,18 @@ export default function PrimarySearchAppBar() {
                         <SearchIconWrapper>
                             <SearchIcon />
                         </SearchIconWrapper>
+                        <div>
                         <StyledInputBase
                             placeholder="Search…"
                             inputProps={{ 'aria-label': 'search' }}
+                            onChange={(e) => setSearchText(e.target.value)}
+                            onKeyPress={(e) => {
+                                if (e.key === 'Enter') {
+                                    handleSearch();
+                                }
+                            }}
                         />
+                        </div>
                     </Search>
                     <Box sx={{ flexGrow: 1 }} />
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
