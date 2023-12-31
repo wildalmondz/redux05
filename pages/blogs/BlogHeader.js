@@ -255,7 +255,6 @@ const BlogHeader = ({ companyDetails, slugListArray, blogListArray, blogContent,
 
         if (localStorageHasLiked === null) { // the condition where no likes yet exists
             parsedLike = {"hasLiked": false};
-            alert(parsedLike.hasLiked);
         } else {
             parsedLike = JSON.parse(localStorageHasLiked);
         }
@@ -453,7 +452,7 @@ const BlogHeader = ({ companyDetails, slugListArray, blogListArray, blogContent,
 
         if (blogIndex === blogListArray.blogs.length){
             console.log(blogIndex + ' blog index is equal to length ' + blogIndex.blogs.length + ' moveValue ' + moveValue);
-            moveValue = 2;
+            moveValue = 2; // move back to the previous blog should user navigate to previous
         }
 
         if ((blogListArray.blogs[index + 1]) && (blogListArray.blogs[index + 1].id)) {
@@ -466,8 +465,8 @@ const BlogHeader = ({ companyDetails, slugListArray, blogListArray, blogContent,
             });
             setBlogTitle(blogListArray.blogs[index + moveValue].id);
             setDisableBlogPrev(false);
-
-        } else if (index) {
+            setBlogNext(true);
+        } else if ((index) && (blogListArray.blogs[index + moveValue])) {
             // unreachable code?
             console.log('Index exists: ' + index);
             setBlogIndex(index);
@@ -478,9 +477,13 @@ const BlogHeader = ({ companyDetails, slugListArray, blogListArray, blogContent,
                 slug: slugListArray.slugs[companyIndex].slug || '',
                 post: blogListArray.blogs[index + moveValue].id,
             });
+            setBlogNext(true);
+        }
+        else { // unable to find the next post
+            setBlogNext(false);
+            setDisableBlogNext(true);
         }
 
-        setBlogNext(true);
     }
 
     return (
