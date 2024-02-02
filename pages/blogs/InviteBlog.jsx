@@ -4,13 +4,12 @@ import PropTypes from 'prop-types';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { v4 } from 'uuid';
 import axios from 'axios';
-// import './stylesheet/InvitePendingForm.scss';
-// import { MessageBoardId } from '../main/lib/containers.js';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
+import {setMessage} from "../../src/redux/features/messageSlice";
 
 let allNew = [];
 let promises = [];
@@ -121,6 +120,59 @@ const setCaptchaRef = (ref) => {
 };
 
 
+const InviteBlog = () => {
+
+	const handleSubmit = () => {
+		alert('Hello submit');
+	};
+
+	return (
+		<>
+				<h4>Get your invitation here</h4>
+					<TextField
+						style={{ backgroundColor: 'white', maxWidth: '400px' }}
+						required
+						id="outlined-basic"
+						label="Email Address"
+						variant="outlined"
+						size="small" // Set the size to small
+						fullWidth // Make the input take the full width
+					/>
+				<Grid container alignItems="center" justifyContent="center" style={{ height: '100%' }}>
+
+
+					{/* First Box */}
+					<Grid item>
+						<div style={{ padding: '2px', margin: '2px' }}>
+							<Grid item xs={8}>
+								<Button variant="contained" onClick={handleSubmit}>
+									Send
+								</Button>
+							</Grid>
+						</div>
+					</Grid>
+					{/* Second Box */}
+					<Grid item>
+						<div style={{padding: '2px', margin: '2px' }}>
+								<div className="captcha" style={{transform:"scale(0.73)", transformOrigin:"0 0"}}>
+									<ReCAPTCHA
+										ref={(r) => setCaptchaRef(r) }
+										size="compact" // Set the size to compact
+										sitekey="6LcUOEAaAAAAAB7egsJshmpS-P92-xI62GTKJz9X"
+										onChange={onChange}
+									/>
+								</div>
+						</div>
+					</Grid>
+				</Grid>
+		</>
+	);
+};
+
+
+export default InviteBlog;
+
+	/*
 class InviteBlog extends Component {
 	constructor(props) {
 		super(props);
@@ -142,9 +194,6 @@ class InviteBlog extends Component {
 
 	capitalizeSlug(slug) {
 		return slug.charAt(0).toUpperCase() + slug.slice(1);
-	}
-
-	componentDidMount() {
 	}
 
 	onChange(value) {
@@ -227,7 +276,10 @@ class InviteBlog extends Component {
 			<section style={{height: '95%' }}>
 				<div>
 						<Grid container spacing={0.5}>
+
+	 */
 							{/* Email Input */}
+/*
 							<Grid item xs={12} sm={6} >
 								<Item>
 									<TextField
@@ -241,13 +293,20 @@ class InviteBlog extends Component {
 									/>
 								</Item>
 							</Grid>
+
+ */
 							{/* Send Button */}
+
+/*
 							<Grid item xs={8}>
 									<Button variant="contained" onClick={this.handleSubmit}>
 										Send
 									</Button>
 							</Grid>
+
+ */
 							{/* reCAPTCHA */}
+/*
 							<Grid item xs={8} sm={6} sx={{height: 25, width: 99}}>
 									<div className="captcha" style={{transform:"scale(0.73)", transformOrigin:"0 0"}}>
 										<ReCAPTCHA
@@ -264,7 +323,9 @@ class InviteBlog extends Component {
 		);
 	}
 }
+/*
 
+/*
 
 InviteBlog.propTypes = {
 	onMessage: PropTypes.func,
@@ -278,4 +339,6 @@ InviteBlog.defaultProps = {
 	onMessage: PropTypes.func,
 };
 
-export default InviteBlog;
+*/
+
+

@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import Link from 'next/link';
 import Box from "@mui/material/Box";
 import TagFacesIcon from "@mui/icons-material/TagFaces";
@@ -12,6 +12,8 @@ import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import dynamic from 'next/dynamic';
+import BlogHeader from "@/blogs/BlogHeader";
+import {blogHandler, handler} from "@/api";
 
 const images = [
     { key: 0, blogId: 33, type: 'winery', thumbnail: { uri: 'https://wildalmonds.com/api/uploads/12d7fb07-5f3f-42a3-9519-baeaee476df7_Airfield.png'}, name:'obelisco'},
@@ -60,8 +62,14 @@ const styles = {
 const DynamicCard = dynamic(() => import('@mui/material/Card'), { ssr: false });
 
 
-export default function Scroll() {
+// export default function Scroll() {
+const Scroll = ({ results }) => {
+
+    console.log(JSON.stringify(results));
+
     const imageListRef = useRef(null);
+    const [likes, setLikes] = useState(0); // State for managing likes
+
 
     const [chipData, setChipData] = React.useState(images);
 
@@ -133,8 +141,7 @@ export default function Scroll() {
                                         />
                                     <CardContent sx={{ flexGrow: 1 }}>
                                         <Typography sx={{ fontSize: 'small', textTransform: 'none' }}>
-                                            This is a media card. You can use this section to describe the
-                                            content.
+                                            Hello world
                                         </Typography>
                                     </CardContent>
                                     </Link>
@@ -149,3 +156,18 @@ export default function Scroll() {
         </Container>
     );
 }
+
+export async function getStaticProps() {
+        let results = await handler(`http://localhost:4500/blog/frontblogs_v2`);
+        // The value of the `props` key will be
+        //  passed to the component
+        console.log(results);
+
+    return {
+        props: {
+            results
+        }
+    }
+}
+
+export default Scroll;

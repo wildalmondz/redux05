@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import styles from '../../styles/Hero.module.css'
 import Typography from "@mui/material/Typography";
 

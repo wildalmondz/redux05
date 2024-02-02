@@ -1,0 +1,25 @@
+            onFetchInvitedGame(gameId, userId, email) {
+                dispatch(fetchInvitedGameId(gameId));  -ok
+                dispatch(fetchInvitedAlmonds(gameId, userId)); -ok
+                dispatch(fetchInvitedSquares(gameId, userId)); - ok
+                dispatch(fetchInvitedLockedStatus(gameId, userId)); - ok
+                dispatch(fetchWildAlmondStatus(gameId, userId));
+                dispatch(fetchTime());
+                dispatch(fetchGameExpire(gameId));
+                dispatch(setAccept(gameId, userId));
+                dispatch(checkForComment(gameId, userId));
+
+
+                dispatch(fetchInvitedEmailId(game_id, email));
+                dispatch(fetchInvitedUserId(game_id, email_id, email));
+                dispatch(fetchInvitedFrom(game_id));
+                /*
+                            onFetchUserId(game_id, email_id, email) {
+                dispatch(fetchInvitedEmailId(game_id, email));
+                dispatch(fetchInvitedUserId(game_id, email_id, email));
+                dispatch(fetchInvitedGameId(game_id));
+                dispatch(fetchGameExpire(game_id));
+                dispatch(fetchInvitedFrom(game_id));
+            },
+                 */
+            },

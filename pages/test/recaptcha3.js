@@ -47,7 +47,6 @@ const Recaptcha = () => {
     };
 
     return (
-        <div>
             <Grid item xs={8} sm={6} sx={{ height: 25, width: 99 }}>
                 <Item>
                     <div className="captcha" style={{ transform: "scale(0.73)", transformOrigin: "0 0" }}>
@@ -65,7 +64,6 @@ const Recaptcha = () => {
                     </Button>
                 </Grid>
             </Grid>
-        </div>
     );
 };
 

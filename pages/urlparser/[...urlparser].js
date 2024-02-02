@@ -1,4 +1,3 @@
-// pages/categories/[...urlparser].js
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 

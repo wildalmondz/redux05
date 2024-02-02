@@ -1,0 +1,82 @@
+[
+  {
+    "almond_id": 1,
+    "isDropped": 375,
+    "isExpired": "active",
+    "almond_available": "#21BC49",
+    "almond_image": "This is where an image will go",
+    "almond_dropped": "#dcfbfc"
+  },
+  {
+    "almond_id": 2,
+    "isDropped": null,
+    "isExpired": "active",
+    "almond_available": "#7695f5",
+    "almond_image": "This is where an image will go",
+    "almond_dropped": "#d6e0ff"
+  },
+  {
+    "almond_id": 3,
+    "isDropped": null,
+    "isExpired": "active",
+    "almond_available": "#FFBD33",
+    "almond_image": "This is where an image will go",
+    "almond_dropped": "#fffad6"
+  },
+  {
+    "almond_id": 4,
+    "isDropped": 347,
+    "isExpired": "active",
+    "almond_available": "#E26044",
+    "almond_image": "This is where an image will go",
+    "almond_dropped": "#efd7fc"
+  },
+  {
+    "almond_id": 5,
+    "isDropped": null,
+    "isExpired": "active",
+    "almond_available": "#9232a8",
+    "almond_image": "This is where an image will go",
+    "almond_dropped": "#fff0e6"
+  },
+  {
+    "almond_id": 6,
+    "isDropped": null,
+    "isExpired": "active",
+    "almond_available": "#bf8040",
+    "almond_image": "This is where an image will go",
+    "almond_dropped": "#f9f2ec"
+  },
+  {
+    "almond_id": 7,
+    "isDropped": null,
+    "isExpired": "active",
+    "almond_available": "#969d70",
+    "almond_image": "This is where an image will go",
+    "almond_dropped": null
+  },
+  {
+    "almond_id": 8,
+    "isDropped": null,
+    "isExpired": "active",
+    "almond_available": "#982e23",
+    "almond_image": "This is where an image will go",
+    "almond_dropped": null
+  },
+  {
+    "almond_id": 9,
+    "isDropped": 339,
+    "isExpired": "active",
+    "almond_available": "#b9b46e",
+    "almond_image": "This is where an image will go",
+    "almond_dropped": null
+  },
+  {
+    "almond_id": 10,
+    "isDropped": 356,
+    "isExpired": "active",
+    "almond_available": "#987123",
+    "almond_image": "This is where an image will go",
+    "almond_dropped": null
+  }
+]

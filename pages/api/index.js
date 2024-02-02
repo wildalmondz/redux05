@@ -11,6 +11,12 @@ export async function blogHandler(url) {
     return data
 }
 
+export async function eventsHandler(url) {
+    const response = await fetch(url);
+    const data = await response.json();
+    return data
+}
+
 export async function search(url) {
     const response = await fetch(url);
       const data = await response.json();

@@ -1,4 +1,5 @@
 // DataContext.js
+// this is for state sharing
 import { createContext, useContext, useEffect, useState } from 'react';
 
 const DataContext = createContext();

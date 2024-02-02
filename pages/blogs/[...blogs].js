@@ -1,23 +1,8 @@
 // pages/categories/[...blogs].js
-
 import { useEffect, useState } from 'react';
 import { blogHandler } from "../../pages/api";
 import BlogHeader from "./BlogHeader";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import {styled} from "@mui/material/styles";
-import Paper from "@mui/material/Paper";
 import { useRouter } from 'next/router';
-
-
-const BlogItem = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-    ...theme.typography.body2,
-    padding: theme.spacing(3),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-    border: '1px solid #000', // Example border for visualization
-}));
 
 export default function Blogs({ blogContent, structuredUrl, companyDetails, slugListArray, blogListArray, idFound, likeCount }) {
     // Use state to track whether parameters are defined
@@ -111,19 +96,6 @@ export async function getStaticProps({ params }) {
     } catch (error) {
         console.error('Error fetching blog data:', error.message);
     }
-
-    // const blogData = await blogHandler(`http://localhost:4500/blog/v2/fastfood/chicken`);
-    /*
-    if (findBlog != 'null') {
-        companyDetails = findBlog.find((entry) => entry.company);
-        slugListArray = findBlog.find((entry) => entry.slugs);
-        blogListArray = findBlog.find((entry) => entry.blogs);
-    }
-
-     */
-
-    // console.log('Here at blogData! ' + JSON.stringify(companyDetails));
-
 
     results = await blogHandler(`http://localhost:4500/blog/post/${structuredUrl.type}/${structuredUrl.slug}/${structuredUrl.post}`);
     blogContent = results[0]?.blog || undefined;
