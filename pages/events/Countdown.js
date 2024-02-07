@@ -41,6 +41,7 @@ const Countdown = ({ expires }) => {
             setMinutes(0);
             setSeconds(0);
             formatDate(new Date(endTime));
+            expires = 'EXPIRED!!!';
         }
     };
 

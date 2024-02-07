@@ -1,0 +1,180 @@
+@import "../../../../../../stylesheets/globals";
+
+.socialMediaPopper {
+  top: 300px !important;
+  left: unset !important;
+  right: 0px !important;
+  display: grid;
+}
+
+.socialMediaButton {
+  &:hover > svg {
+    height: 50px !important;
+    width: 50px !important;
+  }
+}
+
+div[id="wa-blog"] {
+  position: absolute;
+  overflow: scroll;
+  height: 30em;
+}
+
+div[id="add-tournament"] {
+  @include shadow;
+  height: 320px;
+  border: 2px solid $light-blue;
+  border-bottom-color: darken($light-blue, 40%);
+  border-right-color: darken($light-blue, 40%);
+  margin: 1em;
+  padding: 0;
+  display: inline-table;
+  flex-wrap: wrap;
+  position: relative;
+  padding-left: 15px;
+  padding-bottom: 6vw;
+
+  form {
+    overflow-y: auto;
+    max-height: 900px;
+    width: 100%;
+    display: inline;
+
+    > :first-child {
+      flex-grow: 0;
+    }
+
+    input {
+      margin: .5em;
+      padding: .25em;
+      font-size: 1.0em;
+
+      display: list-item;
+    }
+
+    textarea[name="description"] {
+      background-color: white;
+      margin: .5em;
+      padding: .25em;
+      font-size: 1.0em;
+      height: +10em;
+      width: 330px;
+      border-style: double;
+      border-radius: 5px;
+      display: inline;
+      overflow: scroll;
+    }
+
+    textarea[name="square1desc"] {
+      background-color: white;
+      margin: .5em;
+      padding: .25em;
+      font-size: .75em;
+      height: +5em;
+      width: 330px;
+      border-style: double;
+      border-radius: 5px;
+      display: inline;
+      overflow: scroll;
+    }
+    textarea[name="square2desc"] {
+      background-color: white;
+      margin: .5em;
+      padding: .25em;
+      font-size: .75em;
+      height: +5em;
+      width: 330px;
+      border-style: double;
+      border-radius: 5px;
+      display: inline;
+      overflow: scroll;
+    }
+    textarea[name="square3desc"] {
+      background-color: white;
+      margin: .5em;
+      padding: .25em;
+      font-size: .75em;
+      height: +5em;
+      width: 330px;
+      border-style: double;
+      border-radius: 5px;
+      display: inline;
+      overflow: scroll;
+    }
+    textarea[name="square4desc"] {
+      background-color: white;
+      margin: .5em;
+      padding: .25em;
+      font-size: .75em;
+      height: +5em;
+      width: 330px;
+      border-style: double;
+      border-radius: 5px;
+      display: inline;
+      overflow: scroll;
+    }
+
+    input[type="submitXX"] {
+      background-color: cornflowerblue;
+      margin: .5em;
+      padding: .25em;
+      font-size: 1.2em;
+      height: +2em;
+      width: 225px;
+      border-style: ridge;
+      border-radius: 34px;
+      display: inline;
+      box-shadow: none;
+      border: none;
+      outline: 0;
+    }
+
+    div[id="name-details"] {
+      width: 100%;
+      list-style-type: none;
+      display: inline-grid;
+      font-size: 20px;
+    }
+
+    div[id="square-details"] {
+      width: 100%;
+      list-style-type: none;
+      display: inline-grid;
+      font-size: 20px;
+      justify-items: left;
+    }
+
+    div {
+      width: 100%;
+      list-style-type: none;
+      display: inline-grid;
+      background-color: white;
+      font-size: 20px;
+    }
+
+    select {
+      width: 50px;
+      font-size: initial;
+      border-width: medium;
+    }
+  }
+
+  > div:last-child {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: .5em;
+  }
+
+  div.color {
+    height: 100px;
+    flex-basis: 100%;
+  }
+
+  div.time-ago {
+    position: absolute;
+    bottom: .5em;
+    right: .5em;
+    color: darken($light-grey, 40%);
+  }
+}
