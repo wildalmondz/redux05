@@ -6,7 +6,7 @@ import Countdown from "./Countdown";
 import ContainerNoDivision from "../test/squarelayout/containerNoDivision";
 import Paper from "@mui/material/Paper";
 
-export default function rtest({ }) {
+export default function Headsup({ }) {
 
     return (
         <>

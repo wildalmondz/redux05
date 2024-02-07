@@ -36,28 +36,3 @@ export default function HeadsUp({ }) {
         </Grid>
     );
 }
-
-
-/*
-					<nav className="float-container">
-						<div className="flex1">
-							<CountdownId expires={expiretime} />
-						</div>
-						<div className="flex2">
-							{((picks === 0) && (locked === null)) ?
-								<button className="lock-button"
-									type="button"
-									onClick={() => {
-										lockPicks(onLockInvitePick, game_id, userId, picks, locked, history);
-									}}
-								><div id="release">Lock picks</div>
-								</button>
-								: `Picks Remain ${picks}`
-							}
-						</div>
-						<div className="flex3">{(wildalmond !== null) ?
-							<div style={{color:'white'}}>WildAlmond: {wildalmond}</div>
-							: <p id="holder">WildAlmonds</p>}
-						</div>
-					</nav>
- */

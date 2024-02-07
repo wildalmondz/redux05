@@ -10,7 +10,7 @@ export const DataProvider = ({ children, initialData }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('./api/test');
+                //const response = await fetch('./api/test');
                 const blogData = await response.json();
                 setData(blogData);
             } catch (error) {

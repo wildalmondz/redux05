@@ -18,7 +18,8 @@ const PathButtons = styled('div')({
 })
 
 const PathButton = styled('button')({
-    padding:  '0',
+    paddingLeft:  '1em',
+    paddingRight:  '1em',
     color: '#4F81B2',
     backgroundColor: 'white',
     flexBasis: 'fit-content',

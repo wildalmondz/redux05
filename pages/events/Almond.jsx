@@ -96,6 +96,7 @@ const Almond = ({
     let opacity = 1;
     let almond;
 
+
     if (item.name) {
         almond = item.name;
     }
@@ -152,13 +153,11 @@ const Almond = ({
         canDrag: canDrop,
         end: (dropResult, monitor) => {
             // The end function will be called when the drag operation concludes
-            if (monitor.didDrop()) {
-                // If the item was dropped, show an alert
-                // router.post('/setpick_v3/:pickId/:gameId/:userId/:almondId/:squareId'
 
-                // alert('Item dropped!');
+            if (monitor.didDrop()) {
                 setCurColor(droppedColor);
             }
+
         },
         collect: (monitor) => ({
             isDragging: monitor.isDragging(),
@@ -169,10 +168,10 @@ const Almond = ({
     const draggedStyle = {
         opacity: isDragging ? 0.5 : 1,
         cursor: isDropped ? 'not-allowed' : 'move',
-        padding: '8px',
-        marginBottom: '8px',
-        // backgroundColor: isDragging ? 'black' : 'inherit', // Set background color to black when dragging
-        // color: isDragging ? 'white' : 'inherit', // Set text color to white when dragging
+        padding: '2px',
+        marginBottom: '2px',
+        backgroundColor: isDragging ? 'black' : 'inherit', // Set background color to black when dragging
+        color: isDragging ? 'white' : 'inherit', // Set text color to white when dragging
         textDecoration: isDragging ? 'line-through' : 'none', // Add strikeout when dragging
     };
 

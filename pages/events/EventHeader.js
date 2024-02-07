@@ -14,9 +14,11 @@ import SquareList from './SquareList';
 import squareDetails from './squareDetails.json';
 import ContainerNoDivision from './containerNoDivision';
 import PicksComments from "./PicksComments";
+import HeadsUp from "./headsup";
 import SquareControl from "./SquareControl";
 import TextField from "@mui/material/TextField";
 import {useRouter} from "next/router";
+import PathDisplay from "./PathDisplay";
 
 const isTouchDevice = () => {
     if (typeof window !== 'undefined' && "ontouchstart" in window) {
@@ -103,7 +105,7 @@ const ContainerAlmonds = styled('section')({
     alignItems: 'center',
     position: 'relative',
     display: 'grid',
-    justifyContent: 'center',
+    justifyContent: 'space-around',
     border: '1px dashed gainsboro',
     overflowY: 'scroll',
     backgroundColor: 'ghostwhite',
@@ -119,7 +121,7 @@ const EventContainer = styled('div')({
     padding: '.25em 0',
 });
 
-const EventHeader = ({almonds, squares, foundUserId, gameId, email, lockedStatus, expired}) => {
+const EventHeader = ({almonds, squares, foundUserId, gameId, email, lockedStatus, expired, picksRemaining}) => {
     const [droppedItem, setDroppedItem] = useState(null);
     const [almondList, setAlmonds] = useState(null);
     const [divisions, setDivision] = useState(null);
@@ -129,17 +131,8 @@ const EventHeader = ({almonds, squares, foundUserId, gameId, email, lockedStatus
     const [squareCount, setSquareCount] = useState(null);
     const [squareComment, setSquareComment] = useState(null);
     const [activeCount, setActiveCount] = useState(null);
-    const [isOverSquare, setIsOverSquare] = useState(null);
-    const [commentUserId, setCommentUserId] = useState('');
-    const almondData = { almonds };
-    const almondsArray = almondData.almonds.almonds;
-    const squaresArray = almondData.almonds.squares;
 
     const router = useRouter();
-
-
-    console.log('foundUserId: ' + foundUserId);
-    console.log('lockedStatus: ' + lockedStatus);
 
     if ((almonds) && (almondList === null)) {
         setAlmonds(almonds);
@@ -157,13 +150,7 @@ const EventHeader = ({almonds, squares, foundUserId, gameId, email, lockedStatus
         setActiveCount(squareDetails.squares.activeSquareCnt);
     }
 
-    /*
     if (divisions != null) { console.log('Divisions found: ' + divisions); }
-    if (squareCount != null) { console.log('Squares found: ' + squareCount); }
-    if (activeCount != null) { console.log('Active found: ' + activeCount); }
-    // if (commentUserId != '') { console.log('UserId: ' + commentUserId); }
-
-     */
 
     function getSquareById(squares, squareId) {
         console.log('[ looking for ] '+ squareId)
@@ -178,45 +165,24 @@ const EventHeader = ({almonds, squares, foundUserId, gameId, email, lockedStatus
             console.log('Found a dropped item! ' + JSON.stringify(droppedItem));
         } else (console.log('No dropped item'));
 
-        // Check if an item has already been dropped
-        // if (!droppedItem) {
-            // Set the dropped item and perform any additional actions
-            // setDroppedItem(item);
+        try {
+            // Perform the asynchronous operation (e.g., axios request)
+            const res = await axios.post(`http://localhost:4500/pick/setpick_v3/null/${gameId}/${foundUserId}/${item.name}/${item.squareId}`);
 
-            try {
-                // Perform the asynchronous operation (e.g., axios request)
-                const res = await axios.post(`http://localhost:4500/pick/setpick_v3/null/${gameId}/${foundUserId}/${item.name}/${item.squareId}`);
-
-
-
-                // Handle the response
-                if (res.data.user_id !== undefined && /^20000/.test(res.data)) {
-                    setLoggedIn(true);
-                    setUserName(res.data.username); // Update with the actual username property
-                } else {
-                    console.log('Pick made');
-                    router.push(`/events/invitedgame/${gameId}/${foundUserId}/${email}`)
-                }
-            } catch (err) {
-                console.error(err);
+            // Handle the response
+            if (res.data.user_id !== undefined && /^20000/.test(res.data)) {
+                setLoggedIn(true);
+                setUserName(res.data.username); // Update with the actual username property
+            } else {
+                console.log('Pick made');
+                router.push(`/events/invitedgame/${gameId}/${foundUserId}/${email}`)
             }
-       // }
+        } catch (err) {
+           console.error(err);
+        }
     };
 
     const canDeletePick = async (item) => {
-        /*
-        alert(`Delete Pick:
-                    item: ${JSON.stringify(item)}
-                    gameId ${gameId}  
-                    userId ${foundUserId} 
-                    almond ${item.name} 
-                    expired: ${expired} 
-                    locked: ${lockedStatus}
-                    droppedItem: ${JSON.stringify(droppedItem)}         
-                `);
-                
-         */
-
         console.log(`\n\n\n\n Expired!  ${expired} \n\n\n\n`);
         if ((expired !== 'expired') && (lockedStatus === 'unlocked')) {
 
@@ -228,9 +194,7 @@ const EventHeader = ({almonds, squares, foundUserId, gameId, email, lockedStatus
                 });
                 if (res) {
                     setDroppedItem(false);
-                    // setResetPick(true);
                     console.log(JSON.stringify(res));  // Assuming the data you need is in res.data
-
 
                     setTimeout(() => {
                         router.push(`/events/invitedgame/${gameId}/${foundUserId}/${email}`)
@@ -256,11 +220,64 @@ const EventHeader = ({almonds, squares, foundUserId, gameId, email, lockedStatus
         setSquareComment(currentSquare.userComment)
     };
 
+    const lockPicks = (gameId, userId)  => {
+        console.log(`\n\n\n\n In EventHeader [[ GameId! ${gameId} UserId => ${userId} ]]\n\n\n\n`);
+    }
+
+    /*
+    function lockPicks(lockInvitePick, game_id, userId, picks, locked, history) {
+	const picksRemain = picks;
+
+	if ((locked !== null) || (picksLocked === true)) {
+		confirmAlert({
+			title: 'Locked Game',
+			message: `Review was locked at => ${locked}`,
+			buttons: [
+				{
+					label: 'Ok',
+					onClick: () => {},
+				},
+			],
+		});
+	}
+
+	if (picksRemain === 0) {
+		confirmAlert({
+			title: 'Lock',
+			message: 'This will make your review final. No further changes will be allowed. Are you sure?',
+			buttons: [
+				{
+					label: 'Yes',
+					onClick: () => {
+						const userLock = {
+							game_id,
+							userId,
+						};
+						lockInvitePick(userLock.game_id, userLock.userId);
+						history.push(`/events/thankyou/${game_id}/${userId}`);
+					},
+				},
+				{
+					label: 'No',
+					onClick: () => {},
+				},
+			],
+		});
+	}
+	else {
+		alert(`Picks remaining before lock: ${picksRemain}`);
+	}
+}
+     */
+
+
+
     return (
-        <Layout>
+        <>
             {/* Event display section */}
             <EventContainer>
                         <Grid container spacing={0}>
+                            <PathDisplay/>
                             {/* Event display left item */}
                             <Grid item xs={6}>
                                 <StyledItem>
@@ -299,19 +316,14 @@ const EventHeader = ({almonds, squares, foundUserId, gameId, email, lockedStatus
                         </Grid>
             </EventContainer>
                         <Grid item xs={6}>
-                            <Item sx={{
-                                color: 'white',
-                                backgroundImage: 'url(https://wildalmonds.com/api/uploads/725c78bb-ae08-4ed7-93cb-3fb6becd7d04_subtle-dots.png)',
-                                paddingTop: '0.5em',
-                                paddingBottom: '0.5em',
-                                backgroundColor: '#17355B',
-                                height: '100%',
-                                width: '100%',
-                                borderRadius: '0px',
-                                position: 'relative',
-                                display: 'flex',
-                                justifyContent: 'space-around',
-                            }}>Heads up display</Item>
+                        <HeadsUp
+                            picksRemaining={picksRemaining}
+                            lockedStatus={lockedStatus}
+                            gameId={gameId}
+                            userId={foundUserId}
+                            lockedPicks={lockPicks}
+                            expired={expired}
+                        />
                         </Grid>
                 <div style={{ borderTop: '1.5px solid #000', margin: '.25em 0' }} />
                 <div>
@@ -378,12 +390,11 @@ const EventHeader = ({almonds, squares, foundUserId, gameId, email, lockedStatus
                                     </Grid>
                                 </Box>
                             </DndProvider>
-
                         </Grid>
                     </Box>
                 </div>
                 <div style={{ borderTop: '1px solid #000', margin: '3em 0' }} />
-        </Layout>
+        </>
     );
 };
 

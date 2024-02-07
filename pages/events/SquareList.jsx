@@ -42,9 +42,10 @@ const SquareList = ({
 						activeSquares,
 						squareCount,
 						almonds,
+						draggingColor
 					}) => {
 	return (
-		<Box sx={{ flexGrow: 1 }}>
+		<Box sx={{ flexGrow: 1 }} style={{maxHeight: '200px'}}>
 			<Grid container spacing={0.5}>
 				{(squareDetails.length === 0) ?
 					<p>{' '}</p> :
@@ -69,7 +70,7 @@ const SquareList = ({
 								squareCount={squareCount}
 								userComment={square.userComment}
 								almonds={almonds}
-
+								draggingColor={draggingColor}
 							/>
 						</Grid>
 					)}

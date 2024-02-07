@@ -12,11 +12,12 @@ let structuredUrl;
 const EventsArea = styled('section')({
 });
 
-export default function Events({ almonds, squares, foundUserId, gameId, email, locked, expired }) {
+export default function Events({ almonds, squares, foundUserId, gameId, email, locked, expired, picksRemain }) {
     const [parametersDefined, setParametersDefined] = useState(false);
     const [almondList, setAlmondList] = useState(null);
     const [squaresList, setSquaresList] = useState(null);
     const [lockedStatus, setLockedStatus] = useState(null);
+    const [picksRemaining, setPicksRemaining] = useState(null);
     const [curGameId, setGameId] = useState(null);
     const [curUserId, setUserId] = useState(null);
 
@@ -32,23 +33,10 @@ export default function Events({ almonds, squares, foundUserId, gameId, email, l
         if ((locked != null) || (locked != undefined)) {
             setLockedStatus(locked);
         }
+        if ((picksRemain != null) || (picksRemain != undefined)) {
+            setPicksRemaining(picksRemain);
+        }
     }, [almonds, squares, locked]);
-
-    /*  remove if all testing goes well
-    useEffect(() => {
-        if ((almonds != null) || (almonds != undefined)) {
-            // console.log('\n\n\n  ALERT Almonds set!!!! \n\n\n' + JSON.stringify(almondList));
-        }
-    }, [almondList]);
-
-    useEffect(() => {
-        if ((squares != null) || (squares != undefined)) {
-            // console.log('\n\n\n  ALERT Squares set!!!! \n\n\n' + JSON.stringify(squaresList));
-
-        }
-    }, [squaresList]);
-
-     */
 
     useEffect(() => {
         if (foundUserId != undefined) {
@@ -70,6 +58,7 @@ export default function Events({ almonds, squares, foundUserId, gameId, email, l
                         email={email}
                         lockedStatus={lockedStatus}
                         expired={expired}
+                        picksRemaining={picksRemaining}
                     />
                 </>
             )}
@@ -84,6 +73,7 @@ export async function getStaticProps({ params }) {
     let expired = '';
     let locked = '';
     let email = '';
+    let picksRemain = '';
     let foundUserId = '';
 
     const { events } = params;
@@ -99,23 +89,9 @@ export async function getStaticProps({ params }) {
         console.log('Run the invitation code');
     }
 
-    if (structuredUrl.userId) {
-        foundUserId = structuredUrl.userId
-        console.log('\n\n\n foundUserId!!!' + foundUserId);
-    };
-
-    if (structuredUrl.gameId) {
-        gameId = structuredUrl.gameId
-        console.log('gameId!!!' + gameId);
-    };
-
-    if (structuredUrl.email) {
-        email = structuredUrl.email
-        console.log('email!!!' + email + '\n\n\n');
-    };
-
-    console.log('structuredURL: [ ' + JSON.stringify(structuredUrl) + ' ]');
-
+    if (structuredUrl.userId) { foundUserId = structuredUrl.userId };
+    if (structuredUrl.gameId) { gameId = structuredUrl.gameId };
+    if (structuredUrl.email) { email = structuredUrl.email };
 
     if (!structuredUrl.userId) {
         console.log('No userId');
@@ -123,6 +99,7 @@ export async function getStaticProps({ params }) {
             notFound: true,
         };
     }
+
     if (!structuredUrl.email) {
         console.log('No email');
         return {
@@ -132,18 +109,13 @@ export async function getStaticProps({ params }) {
 
     try {
         results = await eventsHandler(`http://localhost:4500/games/gamemaster/${structuredUrl.gameId}/${structuredUrl.userId}/${structuredUrl.email}`);
-        // axios.get(`http://localhost:4500/games/gamemaster/${structuredUrl.gameId}/${structuredUrl.userId}/${structuredUrl.email}`)
-         //   .then((response) => {
-
-
 
         const gameDetails = results;
         almonds = gameDetails.results.find(result => result.almondDetails)?.almondDetails || [];
         squares = gameDetails.results.find(result => result.squareDetails)?.squareDetails || [];
-        // locked = gameDetails.results.find(result => result.locked)?.userlocked || null;
-        // const lockedElement = gameDetails.results.find(result => result.hasOwnProperty("locked"));
         locked = gameDetails.results.find(result => result.hasOwnProperty("locked"));
         expired = gameDetails.results.find(result => result.hasOwnProperty("gameExpire"));
+        picksRemain = gameDetails.results.find(result => result.hasOwnProperty("picksRemain"));
 
         if (locked === 'undefined') {
             console.log('Error!!! userLocked is undefined');
@@ -155,15 +127,12 @@ export async function getStaticProps({ params }) {
         const squareComments = squares.map(square => square.userComment);
 
         locked = locked.locked[0].userlocked;
+        picksRemain = picksRemain.picksRemain;
         expired = expired.gameExpire[0].expires;
-
-        // console.log('Square Ids: [ ' + squareIds + ' ]');
-        // console.log('Square Comments: [ ' + squareComments + ' ]');
-        //expired = expired[0].expires;
-
         console.log('\n\nstart 5.\n\n');
         //console.log(JSON.stringify(results));
         console.log('expiredXX: [ ' + expired + ' ] ');
+        // console.log('picks remain: [ ' + picksRemain + ' ] ');
         console.log('\n\nend\n\n');
 
 
@@ -179,7 +148,8 @@ export async function getStaticProps({ params }) {
             gameId,
             email,
             locked,
-            expired
+            expired,
+            picksRemain
         },
     };
 }

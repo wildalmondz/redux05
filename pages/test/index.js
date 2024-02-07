@@ -1,5 +1,9 @@
 // test/index.js
 import { DataProvider, useData } from './DataContext';
+import PathDisplay from "./PathDisplay";
+import Bottomdeal from "./Bottomdeal";
+import Countdown from "./Countdown";
+
 
 const Home = ({ initialData }) => {
     const data = useData(initialData);
@@ -11,6 +15,7 @@ const Home = ({ initialData }) => {
     );
 };
 
+/*
 export const getStaticProps = async () => {
     try {
         const response = await fetch('http://4500//blog/frontblogs');
@@ -32,12 +37,26 @@ export const getStaticProps = async () => {
     }
 };
 
+ */
+
+const TestPage = ({ }) => {
+    return (
+        <>
+            <Countdown />
+        </>
+    );
+};
+
+/*
 const TestPage = ({ initialData }) => {
     return (
         <DataProvider initialData={initialData}>
-            <Home />
+            <PathDisplay />
+            <Bottomdeal />
         </DataProvider>
     );
 };
+
+ */
 
 export default TestPage;

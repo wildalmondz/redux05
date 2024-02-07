@@ -1,4 +1,5 @@
 import * as React from 'react';
+import axios from 'axios';
 import Grid from "@mui/material/Grid";
 import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
@@ -6,6 +7,7 @@ import Button from '@mui/material/Button';
 import { useEffect, useState } from 'react';
 import { eventsHandler } from "../api";
 import { getClockTime } from './lib.js';
+import Countdown from "./Countdown";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -16,9 +18,13 @@ const Item = styled(Paper)(({ theme }) => ({
   height: '5em' // Adjust the height as needed
 }));
 
-const Countdown = ({ expires }) => {
+const HeadsUp = ({ expired, picksRemaining, lockedStatus, gameId, userId, lockedPicks}) => {
   const [parametersDefined, setParametersDefined] = useState(false);
   const [curExpired, setCurExpired] = useState('');
+  const [curLocked, setCurLocked] = useState('unlocked');
+  const [curWildAlmond, setWildAlmond] = useState(null);
+
+  let wildAlmond = null;
 
   let secondsToWait = 1000;
   let checkDistanceForGrowth = (2592000000 * 12);
@@ -28,7 +34,24 @@ const Countdown = ({ expires }) => {
   });
 
   const handleSubmit = () => {
-    alert('Hello submit');
+    return new Promise((resolve, reject) => {
+      const err = 'Error!';
+
+      axios.post(`http://localhost:4500/pick/setinvitelock/${gameId}/${userId}`)
+          .then((response) => {
+
+            const waRes = response;
+            alert('Current WildAlmond: => ' + waRes.data);
+             if (response.statusText === 'OK') {
+               setWildAlmond(waRes.data);
+               setCurLocked('Locked');
+            }
+          });
+
+      resolve('Locked ok');
+      reject(err);
+    });
+
   };
 
   const checkForExpire = (distance) => {
@@ -41,6 +64,13 @@ const Countdown = ({ expires }) => {
     }
     return getClockTime(distance);
   };
+
+  useEffect(() => {
+    // Check if structuredUrl.post exists before accessing its properties
+    if (lockedStatus !== 'unlocked') {
+      setCurLocked('locked');
+    }
+  }, [lockedStatus]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -63,26 +93,37 @@ const Countdown = ({ expires }) => {
   }, []); // The empty dependency array ensures that this effect runs only once, equivalent to componentDidMount
 
   useEffect(() => {
-    const baseExpireDate = new Date(expires);
+    const baseExpireDate = new Date(expired);
     const baseTime = new Date(); // Assuming serverTime is not needed for this part
 
     const noExpire = 'No expiration';
     const didExpire = 'EXPIRED!!!';
 
-    if (!expires) {
+
+    if (!expired) {
       setCurExpired(setExpired(noExpire));
-    } else if ((expires) && (baseExpireDate < baseTime)) {
+    } else if ((expired) && (baseExpireDate < baseTime)) {
       setCurExpired(setExpired(didExpire));
-    } else if ((expires) && (baseExpireDate > baseTime)) {
+    } else if ((expired) && (baseExpireDate > baseTime)) {
       const ticking = setInterval(() => {
-        setCurExpired(checkForExpire(Math.abs((baseExpireDate) - baseTime.setSeconds(baseTime.getSeconds() + 1))));
+        // setCurExpired(checkForExpire(Math.abs((baseExpireDate) - baseTime.setSeconds(baseTime.getSeconds() + 1))));
+        setCurExpired(noExpire);
       }, secondsToWait);
 
       return () => clearInterval(ticking); // Cleanup interval on component unmount
     } else {
       console.log('You should not see me');
     }
-  }, [expires]);
+  }, [expired]);
+
+
+  if ((curExpired) && (curExpired.expires)) {
+      setCurExpired(curExpired.expires);
+
+    console.log('curExpired: ' + curExpired)
+  }
+
+  console.log('curExpired: ' + curExpired)
 
   return (
       <Grid item xs={6}>
@@ -100,19 +141,47 @@ const Countdown = ({ expires }) => {
           justifyContent: 'space-between',  // Use space-between to evenly space the items
           alignItems: 'center', // Align items to the center vertically
         }}>
-
-          <span>{JSON.stringify(curExpired.expires)}</span>
+          {curExpired.expires != 'No expiration' ?
+              <div>
+                <Countdown expires={expired} />
+              </div>
+              :
+              <span>{' '}</span>
+          }
           <span>
-
-              <Button variant="contained" onClick={handleSubmit}>
-			      Lock?
-			  </Button>
-
+          {(picksRemaining >= 1 && curLocked === 'unlocked' && curExpired !== 'EXPIRED!!!') ?
+                  <span> Picks Remaining: {curExpired}
+                    <span style={{color: 'red', }}>
+                      <strong> [ {picksRemaining} ]</strong>
+                    </span>
+                  </span>
+                  : ((curLocked === 'unlocked') && (curExpired !== 'EXPIRED!!!') && (picksRemaining === 0)) ?
+                  <Button variant="contained" onClick={handleSubmit}>
+                    Lock Picks</Button>
+                      :
+                      <span>{''}</span>
+              }
             </span>
-          <span style={{color: 'red'}}>WildAlmond:{'    '}</span>
+          <span>
+            CurLocked: {curLocked}
+            CurExpired: {curExpired}
+          </span>
+          <span>
+              {(wildAlmond != null) ?
+                    <span style={{color: 'red', }}>
+                      <strong>WildAlmond [ {wildAlmond} ]</strong>
+                    </span>
+                  : (curWildAlmond != null) ?
+                      <span style={{color: 'red', }}>
+                      <strong>WildAlmond [ {curWildAlmond} ]</strong>
+                    </span>
+                  :
+                  <span>{'              '}</span>
+              }
+          </span>
         </Item>
       </Grid>
   );
 };
 
-export default Countdown;
+export default HeadsUp;

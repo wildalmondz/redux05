@@ -1,5 +1,5 @@
 // dragtest/DropZoneComponent.js
-import React from 'react';
+import React, { useState } from 'react';
 import { useDrop } from 'react-dnd';
 import {styled} from "@mui/material/styles";
 import axios from "axios";
@@ -36,16 +36,19 @@ const DropZoneComponent = ({
                                lastDroppedItem,
                                division,
                                squareId,
-                               activeSquares,
-                               squareCount,
                                userComment,
                                almonds,
+                               draggingColor
                             }) => {
+
+
+
     const [{ isOver, canDrop }, drop] = useDrop({
         accept: ItemTypes.DRAGGABLE_ITEM,
         drop: (item, monitor) => {
             item.squareId = squareId;
             handleDrop(item);
+            console.log('\n\n\n Here at drop ' + JSON.stringify(item)); // Set the item in the state when it's dropped
         },
         canDrop: () => !lastDroppedItem, // Allow drop only if no item has been dropped yet
         collect: (monitor) => ({
@@ -57,7 +60,7 @@ const DropZoneComponent = ({
     const containerStyle = {
         border: border,
         height: '130px',
-        backgroundColor: isOver && canDrop ? '#92ad44'
+        backgroundColor: isOver && canDrop ? draggingColor
             : lastDroppedItem ? droppedColor
                 : 'lightgrey',
     };
@@ -74,8 +77,7 @@ const DropZoneComponent = ({
 
     let almondDisplay;
 
-    //     if ((squareStatus === 'inactive') && (this.props.lastDroppedItem)) {
-    //                <p id="squareout"><strong>inactive <del>[{JSON.stringify(this.props.lastDroppedItem)}]</del></strong></p>
+
 
     if ((squareStatus === 'inactive') && (lastDroppedItem)) {
         almondDisplay =
@@ -97,16 +99,11 @@ const DropZoneComponent = ({
         border = '3px groove green';
     }
 
-    /*
-    if ((lastDroppedItem) && (lastDroppedItem === 1)) {
-        // alert(JSON.stringify(droppedItem))
-        almondDisplay =
-            (
-                <p id="toppick"><strong>Top [ 1 ]</strong></p>
-            );
+    if ((isOver) && (lastDroppedItem === null) && (squareStatus !== 'inactive'))  {
+        console.log(JSON.stringify(squareId));
+        border = '7px groove red';
     }
 
-     */
     if ((lastDroppedItem) && (lastDroppedItem != null))  {
         const currentAlmond = getAlmondById(almonds, lastDroppedItem);
 

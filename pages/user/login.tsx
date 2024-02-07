@@ -46,7 +46,7 @@ export default function Login() {
     }
 
     return (
-        <div>
+        <div style={{minHeight: '45em'}}>
             <h1>Login</h1>
             <input type="text" name="username" placeholder="username" onChange={e => setLoginUsername(e.target.value)}></input>
             <input type="password" name="password" placeholder="password" onChange={e => setLoginPassword(e.target.value)}></input>
