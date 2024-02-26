@@ -14,9 +14,12 @@ export const fetchUserProfile = async (dispatch) => {
 
         if ((res.data.firstname !== undefined) && (res.data.lastname !== undefined)) {
             const username = `${res.data.firstname} ${res.data.lastname}`;
+            const user_id = res.data.user_id;
             console.log('username in fetchUserProfile' + username)
+            console.log('user_id in fetchUserProfile' + user_id)
             // Dispatch an action to update the Redux state
-            dispatch(updateProfile(username));
+            // dispatch(updateProfile(username));
+            dispatch(updateProfile(username, user_id));
         }
     } catch (err) {
         console.log(err);
@@ -33,6 +36,7 @@ export const useProfileData = () => {
 
     return {
         username: authState.username || '',
+        user_id: authState.user_id || '',
         isLoggedIn: authState.isLoggedIn || false,
     };
 };

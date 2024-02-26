@@ -54,7 +54,8 @@ const Almond = ({
         isExpired,
         tokenColor,
         droppedItem,
-        droppedColor}) => {
+        droppedColor,
+        curLocked}) => {
 
     const [open, setOpen] = useState(false);
     const [canDrop, setDrop] = useState(true);
@@ -78,8 +79,12 @@ const Almond = ({
                 setDrop(true);
             }
 
-            if (isDropped != null) {
-                setDrop(false); // has been dropped can't drop again
+            if ((isDropped != null) || (curLocked != 'unlocked')) {
+                setDrop(false); // has been dropped or is locked and can't drop again
+            }
+
+            if (curLocked != 'unlocked') {
+                setDrop(false); // has been dropped or is locked and can't drop again
             }
         };
 
@@ -104,25 +109,15 @@ const Almond = ({
     if (!item) { return null; }
 
     const handleAlmondClick = () => {
-        /*
-        alert(`Almond Click:
-                item: ${JSON.stringify(item)}  // to be sent back to EventHeader
-                gameId ${gameId}  
-                userId ${userId} 
-                almond ${almond} 
-                expired: ${expired} 
-                locked: ${lockedStatus}
-                canDrop: ${canDrop}
-                isDropped: ${isDropped}  
-                droppedItem: ${JSON.stringify(droppedItem)}
-                curColor: ${curColor}    
-                resetPick: ${resetPick}               
+        alert(`Almond Click:   
+                curLocked: ${curLocked}           
                 `);
 
-         */
-
-        if (canDrop === false) {
+        if ((canDrop === false) && (curLocked != 'Locked')){
             setOpen(true);
+        }
+        else if (curLocked === 'Locked') {
+            alert(`Event is ${curLocked}`);
         }
         else {
             console.log('Can drop? [ ' + canDrop + ' ]');

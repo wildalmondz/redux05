@@ -1,10 +1,11 @@
 // PicksComments.jsx
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Grid from "@mui/material/Grid";
 import Layout from '../../components/Layout';
 import {styled} from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import EditorComponent from "./EditorComponent";
+import Button from "@mui/material/Button";
 
 const Item = styled(Paper)(({ theme }) => ({
 	backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -17,7 +18,29 @@ const Item = styled(Paper)(({ theme }) => ({
 	borderRadius: '0px'
 }));
 
-const PicksComments = ({ foundComment, userId, gameId, squareId }) => {
+const OverlayText = styled('h3')({
+	position: 'absolute',
+	top: '10%',
+	left: '50%',
+	transform: 'translate(-50%, -50%)',
+	color: 'black', // Text color
+	zIndex: 1, // Ensure text appears above the image
+});
+
+const PicksComments = ({
+						   foundComment,
+						   userId,
+						   gameId,
+						   squareId,
+						   isSoftSave,
+						   setIsSoftSave,
+						   hasChanges,
+						   setHasChanges,
+						   softSquare,
+						   setIsSoftSquare,
+						   textFieldValue,
+						   setTextFieldValue
+					   }) => {
 	return (
 			<Grid item xs={18}>
 				<Item sx={{
@@ -31,12 +54,26 @@ const PicksComments = ({ foundComment, userId, gameId, squareId }) => {
 					position: 'relative',
 					display: 'flex',
 					justifyContent: 'space-around',
-				}}><EditorComponent
-					foundComment={foundComment}
-					userId={userId}
-					gameId={gameId}
-					squareId={squareId}
-				></EditorComponent></Item>
+				}}>            {squareId ? (
+					<EditorComponent
+						foundComment={foundComment}
+						userId={userId}
+						gameId={gameId}
+						squareId={squareId}
+						isSoftSave={isSoftSave}
+						setIsSoftSave={setIsSoftSave}
+						hasChanges={hasChanges}
+						setHasChanges={setHasChanges}
+						softSquare={softSquare}
+						setIsSoftSquare={setIsSoftSquare}
+						textFieldValue={textFieldValue}
+						setTextFieldValue={setTextFieldValue}
+					></EditorComponent>
+				) : <div style={{ height: '12em', marginLeft: '70%'}}>
+					<OverlayText style={{ height: '12em', marginLeft: '70%'}}>
+					</OverlayText>
+				</div>}
+				</Item>
 			</Grid>
 	)
 };

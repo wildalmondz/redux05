@@ -34,23 +34,28 @@ const SquareList = ({
 						handleClick,
 						droppedItem,
 						squareDetails,
-						game_id,
-						game_name,
+						gameId,
 						userId,
-						email,
 						division,
 						activeSquares,
 						squareCount,
 						almonds,
-						draggingColor
+						draggingColor,
+						isSoftSave,
+						setIsSoftSave,
+						hasChanges,
+						setHasChanges,
+						setSquareComment,
+						textFieldValue,
+						squareComment
 					}) => {
 	return (
 		<Box sx={{ flexGrow: 1 }} style={{maxHeight: '200px'}}>
-			<Grid container spacing={0.5}>
+			<Grid container spacing={0.5} >
 				{(squareDetails.length === 0) ?
 					<p>{' '}</p> :
 					squareDetails.map(square =>
-						<Grid key={square.id} item xs={3} sm={2} md={1.5} lg={1} sx={{ height: '8.75em' }}>
+						<Grid container spacing={0.5} key={square.id} item xs={3} sm={2} md={1.5} lg={1} sx={{ height: '8.75em' }}>
 							<DropZoneComponent
 								key={square.square_id}  // Assign a unique key to DropZoneComponent
 								type={ItemTypes.ALMOND}
@@ -58,7 +63,7 @@ const SquareList = ({
 								handleClick={handleClick}
 								droppedItem={droppedItem}
 								squareName={square.square_name}
-								game_id={game_id}
+								gameId={gameId}
 								userId={userId}
 								image={square.image_path}
 								squareStatus={square.square_status}
@@ -71,6 +76,13 @@ const SquareList = ({
 								userComment={square.userComment}
 								almonds={almonds}
 								draggingColor={draggingColor}
+								hasChanges={hasChanges}
+								setHasChanges={setHasChanges}
+								isSoftSave={isSoftSave}
+								setIsSoftSave={setIsSoftSave}
+								squareComment={squareComment} // test only remove later
+								setSquareComment={setSquareComment}
+								textFieldValue={textFieldValue}
 							/>
 						</Grid>
 					)}

@@ -12,12 +12,23 @@ let structuredUrl;
 const EventsArea = styled('section')({
 });
 
-export default function Events({ almonds, squares, foundUserId, gameId, email, locked, expired, picksRemain }) {
+export default function Events({
+          almonds,
+          squares,
+          foundUserId,
+          gameId,
+          email,
+          locked,
+          expired,
+          picksRemain,
+          wildAlmond
+            }) {
     const [parametersDefined, setParametersDefined] = useState(false);
     const [almondList, setAlmondList] = useState(null);
     const [squaresList, setSquaresList] = useState(null);
     const [lockedStatus, setLockedStatus] = useState(null);
     const [picksRemaining, setPicksRemaining] = useState(null);
+    const [curLocked, setCurLocked] = useState('unlocked');
     const [curGameId, setGameId] = useState(null);
     const [curUserId, setUserId] = useState(null);
 
@@ -59,6 +70,9 @@ export default function Events({ almonds, squares, foundUserId, gameId, email, l
                         lockedStatus={lockedStatus}
                         expired={expired}
                         picksRemaining={picksRemaining}
+                        setCurLocked={setCurLocked}
+                        curLocked={curLocked}
+                        wildAlmond={wildAlmond}
                     />
                 </>
             )}
@@ -75,6 +89,7 @@ export async function getStaticProps({ params }) {
     let email = '';
     let picksRemain = '';
     let foundUserId = '';
+    let wildAlmond = '';
 
     const { events } = params;
 
@@ -116,6 +131,8 @@ export async function getStaticProps({ params }) {
         locked = gameDetails.results.find(result => result.hasOwnProperty("locked"));
         expired = gameDetails.results.find(result => result.hasOwnProperty("gameExpire"));
         picksRemain = gameDetails.results.find(result => result.hasOwnProperty("picksRemain"));
+        wildAlmond = gameDetails.results.find(result => result.hasOwnProperty("wildAlmond"));
+
 
         if (locked === 'undefined') {
             console.log('Error!!! userLocked is undefined');
@@ -129,9 +146,10 @@ export async function getStaticProps({ params }) {
         locked = locked.locked[0].userlocked;
         picksRemain = picksRemain.picksRemain;
         expired = expired.gameExpire[0].expires;
+        wildAlmond = wildAlmond.wildAlmond[0].wildalmond;
+
         console.log('\n\nstart 5.\n\n');
-        //console.log(JSON.stringify(results));
-        console.log('expiredXX: [ ' + expired + ' ] ');
+        console.log('wildAlmond: [ ' + wildAlmond + ' ] ');
         // console.log('picks remain: [ ' + picksRemain + ' ] ');
         console.log('\n\nend\n\n');
 
@@ -149,7 +167,8 @@ export async function getStaticProps({ params }) {
             email,
             locked,
             expired,
-            picksRemain
+            picksRemain,
+            wildAlmond
         },
     };
 }

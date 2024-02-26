@@ -1,7 +1,5 @@
 // redux/store.ts
 
-// redux/store.ts
-
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import authReducer from './features/auth-slice';
 import counterReducer from './features/counter-slice'; // Import the new slice

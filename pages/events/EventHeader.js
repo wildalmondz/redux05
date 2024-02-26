@@ -1,7 +1,6 @@
 // EventHeader.js
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Layout from '../../components/Layout';
 import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -15,7 +14,6 @@ import squareDetails from './squareDetails.json';
 import ContainerNoDivision from './containerNoDivision';
 import PicksComments from "./PicksComments";
 import HeadsUp from "./headsup";
-import SquareControl from "./SquareControl";
 import TextField from "@mui/material/TextField";
 import {useRouter} from "next/router";
 import PathDisplay from "./PathDisplay";
@@ -121,7 +119,20 @@ const EventContainer = styled('div')({
     padding: '.25em 0',
 });
 
-const EventHeader = ({almonds, squares, foundUserId, gameId, email, lockedStatus, expired, picksRemaining}) => {
+const EventHeader = ({
+                almonds,
+                squares,
+                foundUserId,
+                gameId,
+                email,
+                lockedStatus,
+                expired,
+                picksRemaining,
+                curLocked,
+                setCurLocked,
+                wildAlmond
+        }) => {
+
     const [droppedItem, setDroppedItem] = useState(null);
     const [almondList, setAlmonds] = useState(null);
     const [divisions, setDivision] = useState(null);
@@ -131,6 +142,10 @@ const EventHeader = ({almonds, squares, foundUserId, gameId, email, lockedStatus
     const [squareCount, setSquareCount] = useState(null);
     const [squareComment, setSquareComment] = useState(null);
     const [activeCount, setActiveCount] = useState(null);
+    const [isSoftSave, setIsSoftSave] = useState(false);
+    const [softSquareId, setSoftSquareId] = useState('');
+    const [hasChanges, setHasChanges] = useState(false);
+    const [textFieldValue, setTextFieldValue] = useState('');
 
     const router = useRouter();
 
@@ -153,13 +168,14 @@ const EventHeader = ({almonds, squares, foundUserId, gameId, email, lockedStatus
     if (divisions != null) { console.log('Divisions found: ' + divisions); }
 
     function getSquareById(squares, squareId) {
-        console.log('[ looking for ] '+ squareId)
+        console.log('[ Event Header looking for ] '+ squareId)
         return squares.find(square => square.square_id === squareId);
     }
 
-    const handleDrop = async (item) => {
-        // const currentSquare = getSquareById(squares, squareId);
+    if (hasChanges === true) { // alert('Change found?: In event header => ' + hasChanges + ' <= ');
+         }
 
+    const handleDrop = async (item) => {
         console.log('\n\nHandle Drop Item: \n\n' + JSON.stringify(item) + '\n\n\n');
         if (droppedItem) {
             console.log('Found a dropped item! ' + JSON.stringify(droppedItem));
@@ -206,71 +222,44 @@ const EventHeader = ({almonds, squares, foundUserId, gameId, email, lockedStatus
                 console.error(err);
             }
         }
-
         return true;
     }
 
-    const handleClick = (squareId) => {
+    const handleClick = async (squareId) => {
         const currentSquare = getSquareById(squares, squareId);
         setSquareId(currentSquare.square_id);
         setSquareDescription(currentSquare.square_description);
-        setSquareComment(currentSquare.userComment)
         setSquareName(currentSquare.square_name);
         setSquareDescription(currentSquare.square_description);
-        setSquareComment(currentSquare.userComment)
+        //setSquareComment(currentSquare.userComment) // default way of getting square comment
+
+        if(hasChanges) {
+
+            let cleanInsert;
+
+            try {
+                cleanInsert = encodeURIComponent(textFieldValue);
+                cleanInsert = cleanInsert.replace(/[/]/g, '%2F')
+                    .replace(/[?]/g, '%3F')
+                    .replace(/[']/g, '%27')
+                    .replace(/["]/g, '%22')
+                    .replace(/[#]/g, '%23');
+
+                await axios.post(`http://localhost:4500/pick/setsquarecomment_v2/${foundUserId}/${gameId}/${softSquareId}/${isSoftSave}/${cleanInsert}`, { textFieldValue });
+                console.log('Content saved successfully!' + textFieldValue);
+                setHasChanges(false); // Reset changes after saving
+                setIsSoftSave(false); // Reset changes after saving
+
+            } catch (error) {
+                console.error('Error saving content:', error);
+            }
+         }
+
     };
 
     const lockPicks = (gameId, userId)  => {
         console.log(`\n\n\n\n In EventHeader [[ GameId! ${gameId} UserId => ${userId} ]]\n\n\n\n`);
     }
-
-    /*
-    function lockPicks(lockInvitePick, game_id, userId, picks, locked, history) {
-	const picksRemain = picks;
-
-	if ((locked !== null) || (picksLocked === true)) {
-		confirmAlert({
-			title: 'Locked Game',
-			message: `Review was locked at => ${locked}`,
-			buttons: [
-				{
-					label: 'Ok',
-					onClick: () => {},
-				},
-			],
-		});
-	}
-
-	if (picksRemain === 0) {
-		confirmAlert({
-			title: 'Lock',
-			message: 'This will make your review final. No further changes will be allowed. Are you sure?',
-			buttons: [
-				{
-					label: 'Yes',
-					onClick: () => {
-						const userLock = {
-							game_id,
-							userId,
-						};
-						lockInvitePick(userLock.game_id, userLock.userId);
-						history.push(`/events/thankyou/${game_id}/${userId}`);
-					},
-				},
-				{
-					label: 'No',
-					onClick: () => {},
-				},
-			],
-		});
-	}
-	else {
-		alert(`Picks remaining before lock: ${picksRemain}`);
-	}
-}
-     */
-
-
 
     return (
         <>
@@ -309,6 +298,14 @@ const EventHeader = ({almonds, squares, foundUserId, gameId, email, lockedStatus
                                             userId={foundUserId}
                                             gameId={gameId}
                                             squareId={squareId}
+                                            isSoftSave={isSoftSave}
+                                            setIsSoftSave={setIsSoftSave}
+                                            hasChanges={hasChanges}
+                                            setHasChanges={setHasChanges}
+                                            softSquare={softSquareId}
+                                            setIsSoftSquare={setSoftSquareId}
+                                            textFieldValue={textFieldValue}
+                                            setTextFieldValue={setTextFieldValue}
                                         >
                                         </PicksComments>
                                     </CommentSection>
@@ -323,6 +320,9 @@ const EventHeader = ({almonds, squares, foundUserId, gameId, email, lockedStatus
                             userId={foundUserId}
                             lockedPicks={lockPicks}
                             expired={expired}
+                            curLocked={curLocked}
+                            setCurLocked={setCurLocked}
+                            wildAlmond={wildAlmond}
                         />
                         </Grid>
                 <div style={{ borderTop: '1.5px solid #000', margin: '.25em 0' }} />
@@ -356,6 +356,7 @@ const EventHeader = ({almonds, squares, foundUserId, gameId, email, lockedStatus
                                                     expired={expired}
                                                     handleDrop={handleDrop}
                                                     canDeletePick={canDeletePick}
+                                                    curLocked={curLocked}
                                                 >
                                                 </AlmondList>
                                             </ContainerAlmonds>
@@ -383,6 +384,13 @@ const EventHeader = ({almonds, squares, foundUserId, gameId, email, lockedStatus
                                                         division={divisions}
                                                         activeSquares={activeCount}
                                                         squareCount={squareCount}
+                                                        isSoftSave={isSoftSave}
+                                                        setIsSoftSave={setIsSoftSave}
+                                                        hasChanges={hasChanges}
+                                                        setHasChanges={setHasChanges}
+                                                        squareComment={squareComment}
+                                                        setSquareComment={setSquareComment}
+                                                        textFieldValue={textFieldValue}
                                                     />
                                                 </ContainerNoDivision>
                                             }

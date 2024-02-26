@@ -3,6 +3,7 @@ import { DataProvider, useData } from './DataContext';
 import PathDisplay from "./PathDisplay";
 import Bottomdeal from "./Bottomdeal";
 import Countdown from "./Countdown";
+import ProfileComponent from "./ProfileComponent";
 
 
 const Home = ({ initialData }) => {
@@ -11,6 +12,7 @@ const Home = ({ initialData }) => {
     return (
         <div>
             {JSON.stringify(data)}
+
         </div>
     );
 };
@@ -43,6 +45,10 @@ const TestPage = ({ }) => {
     return (
         <>
             <Countdown />
+            <div>
+                <h4>Profile?</h4>
+                <ProfileComponent />
+            </div>
         </>
     );
 };

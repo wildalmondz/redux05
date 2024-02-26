@@ -21,7 +21,8 @@ const AlmondList = ({
 						droppedItem,
 						canDeletePick,
 						draggingColor,
-						setDraggingColor
+						setDraggingColor,
+						curLocked
 					}) =>
 	(<div id="almond-list">
 		{(almonds.length === 0) ?
@@ -44,6 +45,7 @@ const AlmondList = ({
 						handleDrop={handleDrop}
 						canDeletePick={canDeletePick}
 						setDraggingColor={setDraggingColor}
+						curLocked={curLocked}
 						{...almond}
 						type={ItemTypes.ALMOND}
 					/>

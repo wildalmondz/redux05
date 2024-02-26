@@ -1,4 +1,4 @@
-@import "../../../../../../stylesheets/globals";
+// @import "../../../../../../stylesheets/globals";
 
 div[id="adminpage"] {
   height: 80em;
@@ -53,12 +53,11 @@ img[id="companyimage"]{
 }
 
 section[id="companyDetails"] {
-  @include shadow;
   width: 85%;
   height: 40vw;
-  border: 2px solid $light-blue;
-  border-bottom-color: darken($light-blue, 40%);
-  border-right-color: darken($light-blue, 40%);
+  border: 2px solid lightblue;
+  border-bottom-color: darken(lightblue, 40%);
+  border-right-color: darken(lightblue, 40%);
   margin: 1em;
   padding: 0;
   flex-basis: 100%;
@@ -119,30 +118,5 @@ section[id="companyDetails"] {
   .fixed_header thead {
     background: black;
     color:#fff;
-  }
-}
-
-@media all and (max-width: $break-xs) {
-  div[id=owner-report] {
-    .lineitem {
-      line-height: 1em;
-    }
-  }
-}
-
-@media all and (max-width: $break-sm) {
-  div[id=owner-report] {
-    .lineitem {
-      line-height: .5em;
-    }
-  }
-  section[id="companyEntities"] {
-    overflow: scroll;
-  }
-}
-
-@media all and (max-width: $break-md) {
-  section[id="companyEntities"] {
-    display: inline-grid;
   }
 }

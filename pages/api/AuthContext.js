@@ -7,6 +7,7 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
     const [isLoggedIn, setLoggedIn] = useState(false);
     const [username, setUserName] = useState('');
+    const [user_id, setUserId] = useState('');
 
     const login = async () => {
         try {
@@ -19,6 +20,8 @@ export const AuthProvider = ({ children }) => {
             if (res.data.user_id !== undefined && /^20000/.test(res.data)) {
                 setLoggedIn(true);
                 setUserName(res.data.username); // Update with actual username property
+                setUserId(res.data.user_id); // Update with actual user_id property
+
             } else {
                 console.log('No user found');
             }

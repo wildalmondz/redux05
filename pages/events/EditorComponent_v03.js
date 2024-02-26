@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import axios from 'axios';
+import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 
@@ -8,25 +9,19 @@ const EditorWithNoSSR = dynamic(() => import('react-draft-wysiwyg').then((mod) =
 
 let cleanInsert;
 
-const EditorComponent = ({
-                             foundComment,
-                             userId,
-                             gameId,
-                             squareId,
-                             isSoftSave,
-                             setIsSoftSave,
-                             hasChanges,
-                             setHasChanges,
-                             softSquare,
-                             setIsSoftSquare,
-                             textFieldValue,
-                             setTextFieldValue   }) => {
-    const [editChange, setEditChange] = useState(false);
+const EditorComponent = ({ foundComment, userId, gameId, squareId, isSoftSave, setIsSoftSave, hasChanges, setHasChanges }) => {
+    const [textFieldValue, setTextFieldValue] = useState('');
+    const [foundUserId, setUserId] = useState('');
 
     useEffect(() => {
         // Set initial value when foundComment changes
         setTextFieldValue(foundComment || '');
     }, [foundComment]);
+
+    useEffect(() => {
+        // Set initial value when foundComment changes
+        setUserId(userId || '');
+    }, [userId]);
 
     const handleSave = async () => {
         try {
@@ -38,65 +33,49 @@ const EditorComponent = ({
                 .replace(/[#]/g, '%23');
 
             await axios.post(`http://localhost:4500/pick/setsquarecomment_v2/${userId}/${gameId}/${squareId}/${isSoftSave}/${cleanInsert}`, { textFieldValue });
-            console.log('Content saved successfully!' + textFieldValue);
+            console.log('Content saved successfully!');
             setHasChanges(false); // Reset changes after saving
-            setEditChange(false); // Reset changes after saving
-            setTextFieldValue(textFieldValue)
-
             cleanInsert = '';
         } catch (error) {
             console.error('Error saving content:', error);
         }
     };
 
-    const handleSaveButtonClick = () => {
-        setIsSoftSave(false); // Set isSoftSave to false before executing handleSave
-        handleSave();
-    };
-
     const handleTextFieldChange = (e) => {
         setTextFieldValue(e.target.value);
         setHasChanges(true); // Set changes when text field changes
-        setIsSoftSave(true); // Set edit change
-        setIsSoftSquare(squareId); // Set edit change
-        console.log(softSquare)
     };
 
     useEffect(() => {
         const softSaveBeforeUnmount = async () => {
-            if ((hasChanges) && (editChange == true)) {
+            if (hasChanges) {
                 setIsSoftSave(true);
-                alert('Softsave triggered in Editor Component' + editChange);
-                //await handleSave();
+                alert('Softsave triggered!!');
+                await handleSave();
             }
         };
 
-        const cleanup = () => {
+        return () => {
             softSaveBeforeUnmount();
         };
-
-        window.addEventListener('beforeunload', softSaveBeforeUnmount);
-
-        return cleanup;
     }, [hasChanges]);
 
     if (!squareId) {
-        return <></>; // Return an empty fragment if squareId is not defined
+        return <></>; // Return empty fragment if squareId is not defined
     }
 
     return (
         <div style={{ width: '100%' }}>
-            {hasChanges ? (
+            {hasChanges && (
                 <Button
                     type="submit"
                     variant="contained"
-                    onClick={handleSaveButtonClick}
+                    onClick={handleSave}
                     style={{ height: '2em', marginLeft: '70%' }}
                 >
                     Save
                 </Button>
-            ) : <div style={{ height: '2em', marginLeft: '70%' }}>
-                </div>}
+            )}
             <TextField
                 label="Square Comment"
                 variant="outlined"
@@ -108,8 +87,6 @@ const EditorComponent = ({
             />
         </div>
     );
-
-
 };
 
 export default EditorComponent;

@@ -32,7 +32,7 @@ export const auth = createSlice({
                 value: {
                     isAuth: true,
                     username: action.payload,
-                    uid: "de9320430safde",
+                    uid: "de9320430safee",
                     isModerator: false,
                 },
             };

@@ -16,15 +16,12 @@ const Item = styled(Paper)(({ theme }) => ({
   height: '5em' // Adjust the height as needed
 }));
 
-const HeadsUp = ({ expired, picksRemaining, lockedStatus, gameId, userId, curLocked, setCurLocked, wildAlmond }) => {
+const HeadsUp = ({ expired, picksRemaining, lockedStatus, gameId, userId }) => {
   const [curExpired, setCurExpired] = useState('');
+  const [curLocked, setCurLocked] = useState('unlocked');
   const [curWildAlmond, setWildAlmond] = useState(null);
 
-  console.log(`\n\n\n {wildAlmond}` + wildAlmond);
-
-  if ((wildAlmond != null) && (curWildAlmond === null)){
-    setWildAlmond(wildAlmond);
-  }
+  let wildAlmond = null;
 
   const handleSubmit = () => {
     return new Promise((resolve, reject) => {
@@ -97,9 +94,9 @@ const HeadsUp = ({ expired, picksRemaining, lockedStatus, gameId, userId, curLoc
           alignItems: 'center', // Align items to the center vertically
         }}>
           {curExpired.expires != 'No expiration' ?
-              <span id={"countdown"} style={{ flex: 1 }}>
+              <div>
                 <Countdown expires={expired} curLocked={curLocked} setCurLocked={setCurLocked} />
-              </span>
+              </div>
               :
               <span>{' '}</span>
           }

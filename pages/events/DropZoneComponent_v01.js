@@ -1,7 +1,9 @@
 // dragtest/DropZoneComponent.js
 import React, { useEffect, useState } from 'react';
 import { useDrop } from 'react-dnd';
-import {styled} from "@mui/material/styles";
+import {styled, useTheme} from "@mui/material/styles";
+import useMediaQuery from '@mui/material/useMediaQuery';
+
 import axios from "axios";
 
 const ItemTypes = {
@@ -46,6 +48,8 @@ const DropZoneComponent = ({
                                textFieldValue
                             }) => {
 
+    const theme = useTheme();
+    const isWindowSmallerThan400px = useMediaQuery(theme.breakpoints.down('sm'));
 
     const [changeDetected, setChangeDetected] = useState(false);
 
@@ -164,7 +168,13 @@ const DropZoneComponent = ({
     };
 
     return (
-        <SquareArea>
+        <SquareArea
+            sx={{
+                height: isWindowSmallerThan400px ? '6rem' : '8.5rem',
+                width: isWindowSmallerThan400px ? '4rem' : '5.5rem',
+            }}
+        >
+
         <div onClick={handleSquareClick} ref={drop} style={containerStyle}>
             {droppedItem ? (
                 <div id="squareName"
