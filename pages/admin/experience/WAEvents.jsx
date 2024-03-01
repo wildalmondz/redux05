@@ -1,18 +1,11 @@
-//htmltest.js
+//WAEvents.js
 import React, { useState, useEffect } from 'react';
 import TextField from '@mui/material/TextField';
 import Box from "@mui/material/Box";
-import MenuItem from "@mui/material/MenuItem";
 import {styled} from "@mui/material/styles";
-import {useAppSelector} from "@/redux/store";
-import {handler} from "../../api";
 import Autocomplete from "@mui/material/Autocomplete";
 import FormControl from "@mui/material/FormControl";
-import FormLabel from "@mui/material/FormLabel";
-import {FormControlLabel, Radio, RadioGroup} from "@mui/material";
 import Button from "@mui/material/Button";
-//import axios from "axios";
-//import axios from 'axios';
 
 const AdminPage = styled('div')({
     display: 'flex',
@@ -21,12 +14,15 @@ const AdminPage = styled('div')({
     paddingBottom: '3em',
 })
 
-const Collection = ({ groupId, groupName, setCollectionName, setTournament_id, tournament_id }) => {
+const Collection = ({ groupId, groupName, collectionName, game_name, setEventName, setEvent_id, tournament_id }) => {
+    const [id, setId] = useState(false);
+    const [name, setName] = useState(false);
     const [expires, setExpires] = useState('');
     const [expired_status, setExpired_status] = useState('');
-    const [tournament, setTournament] = useState('');
     const [tournament_name, setTournament_name] = useState('');
-    const [tournament_description, setTournament_description] = useState('');
+    const [game_id, setGame_id] = useState('');
+    const [game_description, setGame_description] = useState('');
+    const [game_wildAlmond, setGame_wildAlmond] = useState('');
     const [tournament_restriction, setTournament_restriction] = useState('');
     const [tournament_status, setTournament_status] = useState('');
     const [almond_count, setAlmond_count] = useState('');
@@ -36,10 +32,12 @@ const Collection = ({ groupId, groupName, setCollectionName, setTournament_id, t
     useEffect(() => {
         const fetchInitialData = async () => {
             try {
-                const response = await fetch(`http://localhost:4500/admintournaments/${groupId}`, {
+
+                const response = await fetch(`http://localhost:4500/tourneygames/${tournament_id}`, {
                     credentials: 'include', // Include credentials in the request
                 });
                 const data = await response.json();
+                console.log(JSON.stringify(data))
                 setResults(data);
             } catch (error) {
                 console.error('Error fetching data:', error.message);
@@ -60,7 +58,7 @@ const Collection = ({ groupId, groupName, setCollectionName, setTournament_id, t
                     const collectionData = await collectionResponse.json();
                     setTournament(collectionData);
 
-                    setTournament_description(collectionData[0][0].tournament_description);
+                    setGame_description(collectionData[0][0].game_description);
                     setAlmond_count(collectionData[0][0].almond_count);
                     setSquare_count(collectionData[0][0].square_count);
                     setTournament_status(collectionData[0][0].tournament_status);
@@ -88,13 +86,13 @@ const Collection = ({ groupId, groupName, setCollectionName, setTournament_id, t
                 credentials: 'include',
                 headers: { Accept: 'application/json' },
             })
-            .then((response) => {
-                if (response.ok) {
-                    console.log(response.json())
-                    //return response.json();
-                }
-                //throw new Error('Bad HTTP stuff');
-            })
+                .then((response) => {
+                    if (response.ok) {
+                        console.log(response.json())
+                        //return response.json();
+                    }
+                    //throw new Error('Bad HTTP stuff');
+                })
             resolve('Added Ok');
             reject(Error);
         });
@@ -136,6 +134,10 @@ const Collection = ({ groupId, groupName, setCollectionName, setTournament_id, t
                 setTournament_description(value);
             }
 
+            if (name === 'game_description') {
+                setGame_description(value);
+            }
+
             if (name === 'expires') {
                 setExpires(value);
             }
@@ -149,8 +151,8 @@ const Collection = ({ groupId, groupName, setCollectionName, setTournament_id, t
     //            <div>Results: {JSON.stringify(tournament)}</div>
     return (
         <>
-            <h2>Collection</h2>
-            <h4>Group: {groupName}</h4>
+            <h2>{groupName}</h2>
+            <h4>{collectionName}</h4>
             <AdminPage>
                 <Box
                     component="form"
@@ -164,17 +166,17 @@ const Collection = ({ groupId, groupName, setCollectionName, setTournament_id, t
                         <Autocomplete
                             style={{ minWidth: '15em' }}
                             options={[
-                                { tournament_name: '--New--' }, // Add the option for "--New--"
+                                { game_name: '--New--' }, // Add the option for "--New--"
                                 ...results
                                     .slice()
-                                    .sort((a, b) => a.tournament_name.localeCompare(b.tournament_name)),
+                                    .sort((a, b) => a.game_name.localeCompare(b.game_name)),
                             ]}
-                            getOptionLabel={(option) => option.tournament_name}
+                            getOptionLabel={(option) => option.game_name}
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
-                                    label="Collection"
-                                    helperText="Select a collection"
+                                    label="Event"
+                                    helperText="Select an event"
                                 />
                             )}
                             onChange={(event, value) => {
@@ -184,21 +186,25 @@ const Collection = ({ groupId, groupName, setCollectionName, setTournament_id, t
                                         // You can open a modal or take any other action here
                                         alert('Add a new Collection');
                                     } else {
-                                        setCollectionName(value.tournament_name)
+                                        setEventName(value.game_name)
                                         setTournament_name(value.tournament_name);
-                                        setTournament_id(value.tournament_id);
+                                        setEvent_id(value.game_id);
+                                        setGame_description(value.game_description);
+                                        setGame_wildAlmond(value.game_wildalmond);
                                     }
                                 } else {
                                     setTournament_name('');
                                     setTournament_id('');
                                     setTournament('');
+                                    setGame_description('');
+                                    setGame_wildAlmond('');
                                 }
                             }}
                         />
                     </div>
                     <section id="adminPage">
                         {(tournament_name === '') ?
-                            <div>Select a company</div>
+                            ""
                             :
                             <section id="companyEntities">
                                 <form noValidate>
@@ -207,16 +213,24 @@ const Collection = ({ groupId, groupName, setCollectionName, setTournament_id, t
                                             <div className="flex-child-element green">
                                                 <TextField
                                                     required={true}
-                                                    label="Tournament Id"
-                                                    name="tournament_id"
-                                                    value={tournament_id}
+                                                    label="Event Id"
+                                                    name="event_id"
+                                                    value={game_id}
                                                     disabled
                                                 />
                                                 <TextField
                                                     required={true}
-                                                    label="Tournament Name"
-                                                    name="tournament_name"
-                                                    value={tournament_name}
+                                                    label="Event Name"
+                                                    name="event_name"
+                                                    value={game_name}
+                                                    onChange={handleInputChange}
+                                                />
+                                                <br />
+                                                <TextField
+                                                    required={true}
+                                                    label="Event WildAlmond"
+                                                    name="event_wildAlmond"
+                                                    value={game_wildAlmond}
                                                     onChange={handleInputChange}
                                                 />
                                                 <br />
@@ -224,91 +238,18 @@ const Collection = ({ groupId, groupName, setCollectionName, setTournament_id, t
                                                     fullWidth
                                                     id="outlined-multiline-flexible"
                                                     label="Description"
-                                                    name="tournament_description"
+                                                    name="game_description"
                                                     multiline
                                                     rows={4}
-                                                    defaultValue="Tournament Description"
-                                                    value={tournament_description}
+                                                    defaultValue="Event Description"
+                                                    value={game_description}
                                                     onChange={handleInputChange}
                                                 />
                                                 <br />
-                                                <br />
-                                                <TextField
-                                                    disabled
-                                                    id="outlined-number"
-                                                    label="Square Count"
-                                                    name="square_count"
-                                                    type="number"
-                                                    value={square_count}
-                                                    onChange={handleInputChange}
-                                                />
-                                                <br />
-                                                <TextField
-                                                    required={true}
-                                                    label="Almond Count"
-                                                    name="almond_count"
-                                                    value={almond_count}
-                                                    onChange={handleInputChange}
-                                                />
                                                 <br />
                                             </div>
                                             <div className="flex-child-element magenta">
                                                 <br />
-                                                <FormControl sx={{ m: 1, minWidth: 120 }}>
-                                                    <FormLabel id="demo-controlled-radio-buttons-group">Status</FormLabel>
-                                                    <RadioGroup
-                                                        row
-                                                        aria-labelledby="demo-controlled-radio-buttons-group"
-                                                        name="tournament_status"
-                                                        value={tournament_status}
-                                                        onChange={handleInputChange}
-                                                    >
-                                                        <FormControlLabel value="active" control={<Radio />} label="active" />
-                                                        <FormControlLabel value="inactive" control={<Radio />} label="inactive" />
-                                                    </RadioGroup>
-                                                </FormControl>
-                                                <br />
-                                                <FormControl sx={{ m: 1, minWidth: 120 }}>
-                                                    <FormLabel id="demo-controlled-radio-buttons-group">Expired Status</FormLabel>
-                                                    <RadioGroup
-                                                        row
-                                                        aria-labelledby="demo-controlled-radio-buttons-group"
-                                                        name="expired_status"
-                                                        value={expired_status}
-                                                        onChange={handleInputChange}
-                                                    >
-                                                        <FormControlLabel value="active" control={<Radio />} label="active" />
-                                                        <FormControlLabel value="inactive" control={<Radio />} label="inactive" />
-                                                    </RadioGroup>
-                                                </FormControl>
-                                                <br />
-                                                <FormControl sx={{ m: 1, minWidth: 120 }}>
-                                                    <FormLabel id="demo-controlled-radio-buttons-group">Accessibility</FormLabel>
-                                                    <RadioGroup
-                                                        row
-                                                        aria-labelledby="demo-controlled-radio-buttons-group"
-                                                        name="tournament_restriction"
-                                                        value={tournament_restriction}
-                                                        onChange={handleInputChange}
-                                                    >
-                                                        <FormControlLabel value="private" control={<Radio />} label="private" />
-                                                        <FormControlLabel value="public" control={<Radio />} label="public" />
-                                                    </RadioGroup>
-                                                </FormControl>
-                                                <br />
-                                                <p>{expires}</p>
-                                                <TextField
-                                                    id="datetime-local"
-                                                    label="Expires"
-                                                    type="datetime-local"
-                                                    name="expires"
-                                                    defaultValue="2023-03-24T13:16"
-                                                    value={expires}
-                                                    onChange={handleInputChange}
-                                                    InputLabelProps={{
-                                                        shrink: true,
-                                                    }}
-                                                />
                                                 <br />
                                                 <img id="companyimage"
                                                      src={'https://wildalmonds.com/api/uploads/2a432b2a-5862-46ca-adcf-eac67a0c20ab_wildAlmondsLogo.jpeg'}

@@ -5,7 +5,7 @@ import { useAppSelector } from "../../src/redux/store";
 import { updateProfile } from "../../src/redux/features/auth-slice";
 import axios from 'axios';
 
-export const fetchUserProfile = async (dispatch) => {
+export const fetchUserProfile = async () => {
     try {
         const res = await axios({
             method: "get",
@@ -18,9 +18,7 @@ export const fetchUserProfile = async (dispatch) => {
             const user_id = res.data.user_id;
             console.log('username in fetchUserProfile' + username)
             console.log('user_id in fetchUserProfile' + user_id)
-            // Dispatch an action to update both username and user_id the Redux state
-            // dispatch(updateProfile({ username, user_id }));
-            dispatch(updateProfile(user_id));
+            return { username, user_id };
         }
     } catch (err) {
         console.log(err);
@@ -32,7 +30,14 @@ export const useProfileData = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        fetchUserProfile(dispatch);
+        const fetchData = async () => {
+            const { username, user_id } = await fetchUserProfile();
+            if (username && user_id) {
+                dispatch(updateProfile({ username, user_id }));
+            }
+        };
+
+        fetchData();
     }, [dispatch]);
 
     return {

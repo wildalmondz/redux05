@@ -1,6 +1,6 @@
 "use client";
 
-import { useAppSelector} from "../../src/redux/store";
+import {AppDispatch, store, useAppSelector} from "@/redux/store";
 import LogIn from "./log-in";
 
 export default function Login() {

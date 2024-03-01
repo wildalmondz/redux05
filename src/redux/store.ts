@@ -10,6 +10,8 @@ const rootReducer = combineReducers({
     counterReducer,
 });
 
+// reducer is a function that takes in an action and the previous state and makes changes to that state
+// returning the value of the new state
 export const store = configureStore({
     reducer: rootReducer,
 });

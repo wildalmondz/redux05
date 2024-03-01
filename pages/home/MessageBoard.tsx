@@ -10,6 +10,7 @@ const MessageBoard: React.FC = () => {
     return (
         <div>
             <p>{authState.username ? authState.username : ""}</p>
+            <h4>XX {authState.user_id}</h4>
         </div>
     );
 };

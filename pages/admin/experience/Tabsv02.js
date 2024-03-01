@@ -5,32 +5,44 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import HtmlTest from './htmltest';
 import Group from './Group';
+import Collection from './Collection';
+import WAEvents from './WAEvents';
+// import OwnerDash from '../Owner/OwnerDash';
 
 export default function CenteredTabs() {
     const [value, setValue] = useState(0);
+    const [groupId, setGroupId] = useState(0);
     const [groupName, setGroupName] = useState('Company/Group');
     const [collectionName, setCollectionName] = useState('Collection');
+    const [foundCollection, setFoundCollection] = useState(false);
+    const [tournament_id, setTournament_id] = useState('');
+    const [event_id, setEvent_id] = useState('');
+
     const [eventName, setEventName] = useState('Event');
     const [invitationName, setInvitationName] = useState('Invitation');
 
     const handleChange = (event, newValue) => {
-        if (newValue === 2) { setCollectionName('Found collection') }
+        if (newValue === 2) { setCollectionName('Select Collection') }
         if (newValue === 3) { setEventName('Found events') }
         setValue(newValue);
     };
 
-    if ((groupName !== 'Company/Group') && (collectionName !== 'Select Collection')) {
+    if ((groupName !== 'Company/Group') && (collectionName !== 'Select Collection') && (!foundCollection)) {
         setCollectionName('Select Collection');
+        setFoundCollection(true);
+    }
+
+    if ((collectionName !== 'Select Collection' || 'Collection') && (eventName !== 'Select Event')) {
+       // setEventName('Select Event');
     }
 
     const handleClick = (event, newValue) => {
-
         if (newValue === 3) { setEventName('Select Event') }
         setValue(newValue);
     };
 
     return (
-        <Box sx={{ flexGrow: 1, width: '100%', bgcolor: 'background.paper', height: '30em' }}>
+        <Box sx={{ flexGrow: 1, width: '100%', bgcolor: 'background.paper', height: '40em', overflow: 'scroll' }}>
             <Tabs
                 value={value}
                 onChange={handleChange}
@@ -48,7 +60,7 @@ export default function CenteredTabs() {
                 <Tab
                     label={eventName}
                     onClick={() => handleClick(null, 3)}
-                    disabled={collectionName === 'Collection'}
+                    disabled={collectionName === 'Select Collection' || collectionName === 'Collection'}
                 />
                 <Tab
                     label="Invitations"
@@ -63,7 +75,14 @@ export default function CenteredTabs() {
                 <Tab label="Testing" onClick={() => handleClick(null, 6)} />
             </Tabs>
             {value === 0 && ( <Box sx={{ p: 3 }}> <HtmlTest /> </Box> )}
-            {value === 1 && ( <Box sx={{ p: 3 }}> <Group groupName={groupName} setGroupName={setGroupName}/> </Box> )}
+            {value === 1 && ( <Box sx={{ p: 3 }}> <Group groupName={groupName} setGroupName={setGroupName} setGroupId={setGroupId}/> </Box> )}
+            {value === 2 && ( <Box sx={{ p: 3 }}> <Collection groupId={groupId} setTournament_id={setTournament_id} tournament_id={tournament_id} groupName={groupName} setCollectionName={setCollectionName}/> </Box> )}
+            {value === 3 && ( <Box sx={{ p: 3 }}> <WAEvents groupName={groupName} collectionName={collectionName} tournament_id={tournament_id} setEventName={setEventName} eventName={eventName} event_id={event_id} setEvent_id={setEvent_id}/> </Box> )}
         </Box>
     );
 }
+
+/*
+            //{value === 4 && ( <Box sx={{ p: 3 }}> <OwnerDash tournament_id={tournament_id} event_id={event_id} /> </Box> )}
+            {value === 5 && ( <Box sx={{ p: 3 }}> <OwnerDash tournament_id={tournament_id} event_id={event_id} /> </Box> )}
+ */

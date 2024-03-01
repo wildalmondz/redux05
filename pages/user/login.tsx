@@ -1,4 +1,8 @@
 // Login.js
+
+"use client";
+
+
 import { useState } from "react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
@@ -27,18 +31,36 @@ export default function Login() {
             if (/^20001/.test(res.data)) {
                 // Use Redux to log in
 
+                console.log('\n\n Res Data??? \n\n' + res.data);
+
+                // Parse the JSON string
+                // const jsonObject = JSON.parse(res.data.split(':')[1]);
+
+                // console.log(jsonObject);
+
+
+
                 // Use a regular expression to extract the name
                 const matchName = res.data.match(/\[([^\]]+)\]/);
+                console.log('matchName? [' + matchName.user_id + ']')
                 let extractedName = "";
+                let user_id = "";
+
 
                 if (matchName && matchName[1]) {
                     extractedName = matchName[1];
-                    console.log(extractedName);
+                    const jsonObject = JSON.parse(extractedName);
+
+                    // Access the user_id property
+                    user_id = jsonObject.user_id;
+
+                    console.log('User id? ' + user_id + '\n\n\n');
                 } else {
                     console.log("No name found in the string.");
                 }
 
                 dispatch(logIn(extractedName));
+                // dispatch(logIn(user_id));
                 router.push("/admin/experience");
             }
         });

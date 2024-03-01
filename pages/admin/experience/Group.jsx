@@ -1,29 +1,11 @@
 //htmltest.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
 import Box from "@mui/material/Box";
 import MenuItem from "@mui/material/MenuItem";
 import {styled} from "@mui/material/styles";
-import {handler} from "../../api";
-
-const currencies = [
-    {
-        value: 'USD',
-        label: '$',
-    },
-    {
-        value: 'EUR',
-        label: '€',
-    },
-    {
-        value: 'BTC',
-        label: '฿',
-    },
-    {
-        value: 'JPY',
-        label: '¥',
-    },
-]
+import {useAppSelector} from "@/redux/store";
 
 const AdminPage = styled('div')({
     display: 'flex',
@@ -32,8 +14,7 @@ const AdminPage = styled('div')({
     paddingBottom: '3em',
 })
 
-const Group = ({results, groupName, setGroupName}) => {
-
+const Group = ({setGroupName, setGroupId}) => {
     const [id, setId] = useState(false);
     const [name, setName] = useState(false);
     const [tournament, setTournament] = useState('');
@@ -47,11 +28,45 @@ const Group = ({results, groupName, setGroupName}) => {
     const [expires, setExpires] = useState('');
     const [expired_status, setExpired_status] = useState('');
     const [company_image, setCompany_image] = useState('');
+    const [results, setResults] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [selectedResult, setSelectedResult] = useState(null);
+
+    const username = useAppSelector((state) => state.authReducer.value.username);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                //const response = await fetch('http://localhost:4500/username');
+                const response = await fetch('http://localhost:4500/username', {
+                    credentials: 'include', // Include credentials in the request
+                });
+                const data = await response.json();
+                setResults(data);
+            } catch (error) {
+                console.error('Error fetching data:', error.message);
+            }
+        };
+
+        fetchData();
+    }, []); // Empty dependency array means this effect runs once on mount
 
 
     const handleNameChange = (e) => {
-        const selectedLabel = currencies.find(option => option.value === e.target.value)?.label;
+        // const selectedLabel = currencies.find(option => option.value === e.target.value)?.label;
+        const selectedLabel = results.find(result => result.id === e.target.value)?.name;
+        const foundGroupId = results.find(result => result.id === e.target.value)?.id;
         setGroupName(selectedLabel);
+
+    };
+
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value);
+    };
+
+    const handleResultClick = (result) => {
+        setSelectedResult(result);
+        setGroupName(result.name);
     };
 
     const handleInputChange = (e) => {
@@ -89,13 +104,21 @@ const Group = ({results, groupName, setGroupName}) => {
         }
     };
 
-    if (results){
+    const myTestAuth = results;
+
+
+    /*
+    if ((myTestAuth.results) && (myTestAuth.results["0"])){
+        console.log('Not Authenticated!!  ' +  myTestAuth.results["0"]);
+    }
+    else {
         console.log('HERE! HERE!!' +  JSON.stringify(results));
     }
 
+     */
+
     return (
         <>
-            <div>Group</div>
             <AdminPage>
                 <Box
                     component="form"
@@ -105,104 +128,52 @@ const Group = ({results, groupName, setGroupName}) => {
                     noValidate
                     autoComplete="off"
                 >
+
                     <div>
-                        <TextField
-                            style={{minWidth: '15em'}}
-                            id="outlined-select-currency"
-                            select
-                            label="Group/company"
-                            defaultValue=""
-                            helperText="Select a group"
-                            onChange={handleNameChange}
-                        >
-                            {currencies.map((option) => (
-                                <MenuItem key={option.value} value={option.value}>
-                                    {option.label}
-                                </MenuItem>
-                            ))}
-                        </TextField>
-                        <div className="flex-parent-element">
-                            <div className="flex-child-element green">
-                                <TextField
-                                    style={{minWidth: '15em'}}
-                                    required={true}
-                                    select
-                                    label="Tournament Name"
-                                    name="tournament_name"
-                                    value={tournament_name}
-                                    onChange={handleInputChange}
-                                />
-                                <br />
-                                <TextField
-                                    style={{minWidth: '15em'}}
-                                    fullWidth
-                                    id="outlined-multiline-flexible"
-                                    label="Description"
-                                    name="tournament_description"
-                                    multiline
-                                    rows={4}
-                                    defaultValue="Tournament Description"
-                                    value={tournament_description}
-                                    onChange={handleInputChange}
-                                />
+                        {(myTestAuth.results && myTestAuth.results["0"]) ? (
+                            <div>
+                            <h4>{myTestAuth.results["0"]}</h4>
                                 <br />
                                 <br />
-                                <TextField
-                                    style={{minWidth: '15em'}}
-                                    disabled
-                                    id="outlined-number"
-                                    label="Square Count"
-                                    name="square_count"
-                                    type="number"
-                                    value={square_count}
-                                    InputLabelProps={{
-                                        shrink: true,
+                            <p>This is a secure side option. Login to continue.</p>
+                            </div>
+                        ) : (
+                            <div>
+
+                                <Autocomplete
+                                    style={{ minWidth: '15em' }}
+                                    options={results
+                                        .slice() // Create a shallow copy to avoid mutating the original array
+                                        .sort((a, b) => a.name.localeCompare(b.name))
+                                    }
+                                    getOptionLabel={(option) => option.name}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="Group/company"
+                                            helperText="Select a group"
+                                        />
+                                    )}
+                                    onChange={(event, value) => {
+                                        if (value) {
+                                            setGroupName(value.name);
+                                            setGroupId(value.id);
+                                        } else {
+                                            setGroupName(''); // Clear the group name if no value is selected
+                                            setGroupId(''); // Clear the group id if no value is selected
+                                        }
                                     }}
                                 />
-                                <br />
-                                <TextField
-                                    style={{minWidth: '15em'}}
-                                    required={true}
-                                    label="Almond Count"
-                                    name="almond_count"
-                                    value={almond_count}
-                                    onChange={handleInputChange}
-                                />
-                                <br />
                             </div>
-                        </div>
+                        )}
+
+
                     </div>
+
                 </Box>
             </AdminPage>
         </>
     );
 };
-
-    // Define the getStaticProps function for data fetching at build time
-    export async function getStaticProps() {
-        try {
-            // Fetch data from the API endpoint
-            //let results = await handler(`http://localhost:4500/blog/frontblogs_v2`);
-            console.log('In Static Props!');
-           //  let results = await handler('http://localhost:4500/admin/username');
-
-            const response = await fetch('http://localhost:4500/admin/username');
-            const results = await response.json();
-
-            // Return the data as props
-            return {
-                props: {
-                    results,
-                },
-            };
-        } catch (error) {
-            console.error('Error fetching data:', error.message);
-
-            // Return an empty object if there's an error
-            return {
-                props: {},
-            };
-        }
-    }
 
 export default Group;

@@ -8,7 +8,7 @@ type InitialState = {
 type AuthState = {
     isAuth: boolean;
     username: string;
-    user_id: number;
+    user_id: string;
     uid: string;
     isModerator: boolean;
     isLoggedIn: boolean;
@@ -19,7 +19,7 @@ const initialState = {
     value: {
         isAuth: false,
         username: "",
-        user_id: 0,
+        user_id: "",
         uid: "",
         profile: "Hello Profile",
         isModerator: true,
@@ -36,7 +36,7 @@ export const auth = createSlice({
             state.value = {
                 isAuth: true,
                 username: action.payload,
-                user_id: 0,
+                user_id: action.payload,
                 uid: action.payload,
                 isModerator: true,
                 profile: "Hello profile",
@@ -47,13 +47,16 @@ export const auth = createSlice({
         toggleModerator: (state) => {
             state.value.isModerator = !state.value.isModerator;
         },
-        updateProfile: (state, action: PayloadAction<{ username: string; user_id: number, isLoggedIn: boolean }>) => {
+        updateProfile: (state, action: PayloadAction<{ username: string; user_id: string; isLoggedIn: boolean; }>) => {
             state.value.username = action.payload.username;
             state.value.user_id = action.payload.user_id;
             state.value.isLoggedIn = action.payload.isLoggedIn;
         },
+        updateUserId: (state, action: PayloadAction<{ user_id: string }>) => {
+            state.value.uid= action.payload.user_id;
+        },
     },
 });
 
-export const { logIn, logOut, toggleModerator, updateProfile } = auth.actions;
+export const { logIn, logOut, toggleModerator, updateProfile, updateUserId} = auth.actions;
 export default auth.reducer;
