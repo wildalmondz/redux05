@@ -126,12 +126,15 @@ export async function getStaticProps({ params }) {
         results = await eventsHandler(`http://localhost:4500/games/gamemaster/${structuredUrl.gameId}/${structuredUrl.userId}/${structuredUrl.email}`);
 
         const gameDetails = results;
+        console.log(gameDetails);
+
         almonds = gameDetails.results.find(result => result.almondDetails)?.almondDetails || [];
         squares = gameDetails.results.find(result => result.squareDetails)?.squareDetails || [];
         locked = gameDetails.results.find(result => result.hasOwnProperty("locked"));
         expired = gameDetails.results.find(result => result.hasOwnProperty("gameExpire"));
         picksRemain = gameDetails.results.find(result => result.hasOwnProperty("picksRemain"));
-        wildAlmond = gameDetails.results.find(result => result.hasOwnProperty("wildAlmond"));
+        // wildAlmond = gameDetails.results.find(result => result.hasOwnProperty("wildAlmond"));
+        wildAlmond = 1001;
 
 
         if (locked === 'undefined') {

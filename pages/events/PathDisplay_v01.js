@@ -312,7 +312,7 @@ function SquareOnly(props) {
                                 height='150px'
                                 width='150px'
                                 src={imagePath}
-                                alt="Product Image"/>
+                                alt="Product_v01 Image"/>
                             :
                             <img
                                 height='100px'

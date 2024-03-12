@@ -93,7 +93,7 @@ class ProductDashboard extends Component {
 						name="productSearch"
 						type="text"
 						fullWidth
-						placeholder="Search for Product Name"
+						placeholder="Search for Product_v01 Name"
 						maxLength="60"
 						variant="standard"
 						onKeyPress= {(e) => {

@@ -8,6 +8,7 @@ export default function Blogs({ blogContent, structuredUrl, companyDetails, slug
     // Use state to track whether parameters are defined
     const [parametersDefined, setParametersDefined] = useState(false);
     const [idSearched, setIdSearched] = useState(false);
+
     const router = useRouter();
 
     useEffect(() => {

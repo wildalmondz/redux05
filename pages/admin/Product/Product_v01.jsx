@@ -9,22 +9,22 @@ import {MessageBoardId } from '../../main/lib/containers';
 import {ProductDashboardId} from './lib/productContainers.js';
 
 /*
-class Product extends React.Component {
+class Product_v01 extends React.Component {
 	render() {
 		return (
 			<div>
 				<br/>
-				<h1>Product Page</h1>
+				<h1>Product_v01 Page</h1>
 			</div>
 		);
 	}
 }
 
-export default withRouter(Product);
+export default withRouter(Product_v01);
 */
 
 
-class Product extends React.Component {
+class Product_v01 extends React.Component {
 	constructor(props) {
 		super(props);
 
@@ -130,16 +130,16 @@ class Product extends React.Component {
 	}
 }
 
-Product.propTypes = {
+Product_v01.propTypes = {
 	messagetext: PropTypes.string,
 	location: PropTypes.object,
 	onFetchAuthStatus: PropTypes.func,
 	onMessage: PropTypes.func,
 };
 
-Product.defaultProps = {
+Product_v01.defaultProps = {
 	onFetchAuthStatus: f => f,
 	onMessage: f => f,
 };
 
-export default withRouter(Product);
+export default withRouter(Product_v01);

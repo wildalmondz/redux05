@@ -1,14 +1,11 @@
 import reportData from "./fullData";
 import ReportComponent from "./ReportComponent";
-import CustomTable from "./CustomTable";
 
-export default function rtest({ }) {
+export default function ProductTest({ }) {
     return (
         <>
-            <div>                <CustomTable data={reportData[0].participation}/>
+            <div>
                 <ReportComponent data={reportData}/>
-
-
             </div>
         </>
     );

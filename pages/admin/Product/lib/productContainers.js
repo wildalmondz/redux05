@@ -19,7 +19,7 @@ import {
     fetchPlayerName
 } from '../../../../../actions.js';
 
-import Product from "../Product.jsx";
+import Product from "../Product_v01.jsx";
 
 export const ProductId = connect(
     state =>

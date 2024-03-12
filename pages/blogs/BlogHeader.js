@@ -514,7 +514,7 @@ const BlogHeader = ({ companyDetails, slugListArray, blogListArray, blogContent,
                                 </StyledItem>
                             </Grid>
                             <Grid item xs={6}>
-                                <Item><InviteBlog /></Item>
+                                <Item><InviteBlog urlParse={urlparse}/></Item>
                             </Grid>
                         </Grid>
                         <Grid item xs={6}>

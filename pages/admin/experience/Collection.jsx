@@ -1,18 +1,14 @@
-//htmltest.js
+//Collection.jsx
 import React, { useState, useEffect } from 'react';
 import TextField from '@mui/material/TextField';
 import Box from "@mui/material/Box";
-import MenuItem from "@mui/material/MenuItem";
 import {styled} from "@mui/material/styles";
-import {useAppSelector} from "@/redux/store";
-import {handler} from "../../api";
 import Autocomplete from "@mui/material/Autocomplete";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import {FormControlLabel, Radio, RadioGroup} from "@mui/material";
 import Button from "@mui/material/Button";
-//import axios from "axios";
-//import axios from 'axios';
+import ProductTable from "./ProductTable";
 
 const AdminPage = styled('div')({
     display: 'flex',
@@ -23,9 +19,12 @@ const AdminPage = styled('div')({
 
 const Collection = ({ groupId, groupName, setCollectionName, setTournament_id, tournament_id }) => {
     const [expires, setExpires] = useState('');
+    const [companyId, setCompanyId] = useState('');
     const [expired_status, setExpired_status] = useState('');
+    const [newCollection, setNewCollection] = useState(false);
+    const [new_tournament, setNew_tournament] = useState('');
     const [tournament, setTournament] = useState('');
-    const [tournament_name, setTournament_name] = useState('');
+    const [tournament_name, setTournament_name] = useState('--New--');
     const [tournament_description, setTournament_description] = useState('');
     const [tournament_restriction, setTournament_restriction] = useState('');
     const [tournament_status, setTournament_status] = useState('');
@@ -59,7 +58,6 @@ const Collection = ({ groupId, groupName, setCollectionName, setTournament_id, t
                     });
                     const collectionData = await collectionResponse.json();
                     setTournament(collectionData);
-
                     setTournament_description(collectionData[0][0].tournament_description);
                     setAlmond_count(collectionData[0][0].almond_count);
                     setSquare_count(collectionData[0][0].square_count);
@@ -77,26 +75,70 @@ const Collection = ({ groupId, groupName, setCollectionName, setTournament_id, t
     }, [tournament_id]); // Empty dependency array means this effect runs once on mount
 
     const handleSubmit = () => {
+        let existing;
+        let writeExpires;
+
+        if (expires !== '') {
+            writeExpires = expires + ':00.00';
+        }
+        else {
+            writeExpires = null;
+        }
+
         return new Promise((resolve, reject) => {
             const err = 'Error!';
-            alert('Submitted here!');
-            // set confirmation here
 
-            return fetch(`http://localhost:4500/updatetourney/${tournament_id}/${tournament_name}/${tournament_description}/${tournament_restriction}/${almond_count}/${tournament_status}/${square_count}/${expires}/${expired_status}`, {
-                mode: 'cors',
-                method: 'put',
-                credentials: 'include',
-                headers: { Accept: 'application/json' },
-            })
-            .then((response) => {
-                if (response.ok) {
-                    console.log(response.json())
-                    //return response.json();
-                }
-                //throw new Error('Bad HTTP stuff');
-            })
-            resolve('Added Ok');
-            reject(Error);
+
+            if(tournament_id) {
+
+                alert('Update here!');
+                // set confirmation here
+
+                return fetch(`http://localhost:4500/updatetourney/${tournament_id}/${tournament_name}/${tournament_description}/${tournament_restriction}/${almond_count}/${tournament_status}/${square_count}/${expires}/${expired_status}`, {
+                    mode: 'cors',
+                    method: 'put',
+                    credentials: 'include',
+                    headers: {Accept: 'application/json'},
+                })
+                    .then((response) => {
+                        if (response.ok) {
+                            console.log(response.json())
+                            //return response.json();
+                        }
+                        //throw new Error('Bad HTTP stuff');
+                    })
+                resolve('Added Ok');
+                reject(Error);
+            }
+
+            else {
+                alert('New add no tournament_id found'
+                + JSON.stringify(tournament)
+               +  'null' + ' '
+                    +  ' new_tournament ' + new_tournament
+                    +  ' tournament_description ' + tournament_description
+                    +  ' tournament_restriction ' + tournament_restriction
+                    +  ' almond_count ' + almond_count
+                    +  ' tournament_status' + tournament_status
+                    +  ' square_count' + square_count
+                    +  ' writeExpires ' + writeExpires
+                    +  ' expired_status '  + expired_status
+                    +  ' id ' + companyId + ' ');
+                /*
+                this.props.onCreateTourney(
+                    'null',
+                    this.state.tournament_name,
+                    this.state.tournament_description,
+                    this.state.tournament_restriction,
+                    this.state.almond_count,
+                    this.state.tournament_status,
+                    this.state.square_count,
+                    writeExpires,
+                    this.state.expired_status,
+                    this.state.id);
+                    */
+
+            }
         });
     };
 
@@ -111,11 +153,10 @@ const Collection = ({ groupId, groupName, setCollectionName, setTournament_id, t
             if (name === 'almond_count') {
                 if ((square_count === undefined) || (value > square_count)) {
                     alert(almond_count + 'Almond count [' + value + '] cannot exceed square count of [' + square_count + ']');
-
-                    this.setState({
-                        [name]: almond_count,
-                    });
                     clientError = true;
+                }
+                else {
+                        setAlmond_count(value);
                 }
             }
 
@@ -132,12 +173,21 @@ const Collection = ({ groupId, groupName, setCollectionName, setTournament_id, t
                 setTournament_name(value);
             }
 
-            if (name === 'tournament_description') {
-                setTournament_description(value);
-            }
+            if (name === 'new_tournament') { setNew_tournament(value); }
+            if (name === 'tournament_description') { setTournament_description(value); }
 
             if (name === 'expires') {
                 setExpires(value);
+            }
+
+            if (name === 'tournament_status') {
+                setTournament_status(value);
+            }
+            if (name === 'expired_status') {
+                setExpired_status(value);
+            }
+            if (name === 'tournament_restriction') {
+                setTournament_restriction(value);
             }
         }
     };
@@ -164,10 +214,8 @@ const Collection = ({ groupId, groupName, setCollectionName, setTournament_id, t
                         <Autocomplete
                             style={{ minWidth: '15em' }}
                             options={[
-                                { tournament_name: '--New--' }, // Add the option for "--New--"
-                                ...results
-                                    .slice()
-                                    .sort((a, b) => a.tournament_name.localeCompare(b.tournament_name)),
+                                { tournament_name: '--New--' },
+                                ...results.slice().sort((a, b) => a.tournament_name.localeCompare(b.tournament_name)),
                             ]}
                             getOptionLabel={(option) => option.tournament_name}
                             renderInput={(params) => (
@@ -177,14 +225,24 @@ const Collection = ({ groupId, groupName, setCollectionName, setTournament_id, t
                                     helperText="Select a collection"
                                 />
                             )}
+                            isOptionEqualToValue={(option, value) => option.tournament_name === value.tournament_name}
+                            value={{ tournament_name: tournament_name }}
                             onChange={(event, value) => {
                                 if (value) {
                                     if (value.tournament_name === '--New--') {
-                                        // Handle the case when "--New--" is selected
-                                        // You can open a modal or take any other action here
                                         alert('Add a new Collection');
+                                        setNewCollection(true);
+                                        setTournament_id('');
+                                        setTournament('');
+                                        setTournament_description('');
+                                        setAlmond_count('');
+                                        setSquare_count('');
+                                        setTournament_status('');
+                                        setExpires('');
+                                        setExpired_status('');
+                                        setTournament_restriction('');
                                     } else {
-                                        setCollectionName(value.tournament_name)
+                                        setCollectionName(value.tournament_name);
                                         setTournament_name(value.tournament_name);
                                         setTournament_id(value.tournament_id);
                                     }
@@ -197,7 +255,17 @@ const Collection = ({ groupId, groupName, setCollectionName, setTournament_id, t
                         />
                     </div>
                     <section id="adminPage">
-                        {(tournament_name === '') ?
+                        {(newCollection === true) ?
+                        <TextField
+                            required={true}
+                            label="Tournament Name"
+                            name="new_tournament"
+                            value={new_tournament}
+                            onChange={handleInputChange}
+                        />
+                            :
+                        <span>{ ''}</span> }
+                        {(tournament_name === '' && newCollection === false) ?
                             <div>Select a company</div>
                             :
                             <section id="companyEntities">
@@ -205,21 +273,15 @@ const Collection = ({ groupId, groupName, setCollectionName, setTournament_id, t
                                     <FormControl style={{width: '100%'}}>
                                         <div className="flex-parent-element">
                                             <div className="flex-child-element green">
+                                                {(tournament_id) ?
                                                 <TextField
-                                                    required={true}
                                                     label="Tournament Id"
                                                     name="tournament_id"
                                                     value={tournament_id}
                                                     disabled
                                                 />
-                                                <TextField
-                                                    required={true}
-                                                    label="Tournament Name"
-                                                    name="tournament_name"
-                                                    value={tournament_name}
-                                                    onChange={handleInputChange}
-                                                />
-                                                <br />
+                                                    :
+                                                    <span>{' '}</span>}
                                                 <TextField
                                                     fullWidth
                                                     id="outlined-multiline-flexible"
@@ -233,6 +295,8 @@ const Collection = ({ groupId, groupName, setCollectionName, setTournament_id, t
                                                 />
                                                 <br />
                                                 <br />
+                                                {(square_count != 0) ?
+                                                    <div>
                                                 <TextField
                                                     disabled
                                                     id="outlined-number"
@@ -242,15 +306,18 @@ const Collection = ({ groupId, groupName, setCollectionName, setTournament_id, t
                                                     value={square_count}
                                                     onChange={handleInputChange}
                                                 />
+                                                        <TextField
+                                                            label="Almond Count"
+                                                            name="almond_count"
+                                                            value={almond_count}
+                                                            onChange={handleInputChange}
+                                                        />
+                                                        <br />
+                                                    </div>
+                                                    :
+                                                    <span>{' '}</span>}
                                                 <br />
-                                                <TextField
-                                                    required={true}
-                                                    label="Almond Count"
-                                                    name="almond_count"
-                                                    value={almond_count}
-                                                    onChange={handleInputChange}
-                                                />
-                                                <br />
+
                                             </div>
                                             <div className="flex-child-element magenta">
                                                 <br />
@@ -338,6 +405,30 @@ const Collection = ({ groupId, groupName, setCollectionName, setTournament_id, t
                             </section>
                         }
                     </section>
+                    <div style={{width: '100%'}}>
+                        <br />
+
+
+                        {(newCollection === true) ?
+                            <div>
+                                <h4>New form goes here</h4>
+                            </div>
+                            :
+                            <span>{' '}</span>
+                        }
+
+
+                    </div>
+                    <div style={{width: '100%'}}>
+                        {(newCollection === false) ?
+                            <div>
+                                <ProductTable tournament_id={tournament_id} />
+                            </div>
+                            :
+                            <span>{' '}</span>
+                        }
+
+                    </div>
                 </Box>
             </AdminPage>
         </>

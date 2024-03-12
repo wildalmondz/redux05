@@ -7,6 +7,9 @@ import HtmlTest from './htmltest';
 import Group from './Group';
 import Collection from './Collection';
 import WAEvents from './WAEvents';
+import reportData from "./fullData";
+import ParticipationTable from "./ParticipationTable";
+import ProductTable from "./ProductTable";
 // import OwnerDash from '../Owner/OwnerDash';
 
 export default function CenteredTabs() {
@@ -72,17 +75,16 @@ export default function CenteredTabs() {
                     onClick={() => handleClick(null, 5)}
                     disabled={groupName === 'Company/Group'}
                 />
-                <Tab label="Testing" onClick={() => handleClick(null, 6)} />
+                <Tab label="Product" onClick={() => handleClick(null, 6)} />
             </Tabs>
             {value === 0 && ( <Box sx={{ p: 3 }}> <HtmlTest /> </Box> )}
             {value === 1 && ( <Box sx={{ p: 3 }}> <Group groupName={groupName} setGroupName={setGroupName} setGroupId={setGroupId}/> </Box> )}
             {value === 2 && ( <Box sx={{ p: 3 }}> <Collection groupId={groupId} setTournament_id={setTournament_id} tournament_id={tournament_id} groupName={groupName} setCollectionName={setCollectionName}/> </Box> )}
             {value === 3 && ( <Box sx={{ p: 3 }}> <WAEvents groupName={groupName} collectionName={collectionName} tournament_id={tournament_id} setEventName={setEventName} eventName={eventName} event_id={event_id} setEvent_id={setEvent_id}/> </Box> )}
+            {value === 4 && ( <Box sx={{ p: 3 }}> <ParticipationTable data={reportData}/> </Box> )}
+            {value === 6 && ( <Box sx={{ p: 3 }}> <ProductTable data={reportData} tournament_id={tournament_id}/> </Box> )}
         </Box>
     );
 }
 
-/*
-            //{value === 4 && ( <Box sx={{ p: 3 }}> <OwnerDash tournament_id={tournament_id} event_id={event_id} /> </Box> )}
-            {value === 5 && ( <Box sx={{ p: 3 }}> <OwnerDash tournament_id={tournament_id} event_id={event_id} /> </Box> )}
- */
+// {value === 5 && ( <Box sx={{ p: 3 }}> <OwnerDash tournament_id={tournament_id} event_id={event_id} /> </Box> )}

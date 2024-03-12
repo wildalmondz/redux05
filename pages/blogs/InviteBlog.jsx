@@ -1,6 +1,4 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-// import { withRouter } from 'react-router';
+import React, { useState, useEffect } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { v4 } from 'uuid';
 import axios from 'axios';
@@ -32,25 +30,29 @@ function urlEncode2(name, userQuery) {
 	});
 }
 
-function sendIt (gameId, gameName, email, count, token, sendMessage) {
+function sendIt (game_id, game_name, email, count, token) {
 	count++;
 	let userId = v4();
 	let emailId = v4();
 	let inviteId = v4();
-
 	let newsMessage = 'WildAlmonds';
+
+	console.log('Game ID here in sendIt!!! ' + game_id);
+	// POST /invited/writeInviteUser/e11ad6af-0630-453f-bc43-8894e317f9af//Bookwalter%20Wines/threeAdmin@wildalmondstest.com/58ea9c91-7bfe-4008-b546-f0957f6a52a9/64ab364c-2105-4f5b-8f45-90a30047f408/threeAdmin@wildalmondstest.com 404 2.455 ms - 356
+
 
 	return new Promise((resolve, reject) => {
 		const err = 'Error!';
 
-		axios.post(`http://localhost:4500/apidev/subscribe/${token}`)
+
+		axios.post(`http://localhost:4500/blog/subscribe/${token}`)
 			.then((response) => {
 				if (response.data.success === true) {
-					axios.post(`http://localhost:4500/invited/writeInviteUser/${userId}/${gameId}/${gameName}/${email}/${emailId}/${inviteId}/${email}`)
+					axios.post(`http://localhost:4500/invited/writeInviteUser/${userId}/${game_id}/${game_name}/${email}/${emailId}/${inviteId}/${email}`)
 						.then((response) => {
 							if (response.data !== 'undefined') {
 								// alert(response.data);
-								console.log('Response Data: [' + response.data + ' ]');
+								console.log('Response Data: [' + JSON.stringify(response.data) + ' ]');
 								if ((/^301/.test(response.data) || (/^302/.test(response.data)))) {
 									newsMessage = `Email Address ${email} is already a reviewer of this event`;
 
@@ -69,10 +71,12 @@ function sendIt (gameId, gameName, email, count, token, sendMessage) {
 									newsMessage = `Thank you. ${email} has been added! Check your email.`;
 								}
 
-								sendMessage(newsMessage);
+								//sendMessage(newsMessage);
 								newsMessage = '';
+
 								setTimeout(() => {
-									return sendMessage('');
+									//return sendMessage('');
+									return;
 								}, messageWait);
 
 							}
@@ -107,23 +111,154 @@ const resetCaptcha = () => {
 	}, 750);
 }
 
-
-function onChange(value) {
-	console.log("Captcha value:", value);
-	resetCaptcha();
-}
-
 const setCaptchaRef = (ref) => {
 	if (ref) {
 		return captcha = ref;
 	}
 };
 
+const InviteBlog = ({urlParse}) => {
 
-const InviteBlog = () => {
+	const [token, setToken] = useState(''); // State for managing likes
+	const [email, setEmail] = useState('');
+
+	const [game_id, setGameId] = useState('');
+	const [game_name, setGameName] = useState('');
+	const [game_description, setGameDescription] = useState('');
+
+	const [eventData, setEventData] = useState('');
+
+
+
+	const onChange = (value) => {
+			setToken(value);
+	}
+
+	useEffect(() => {
+	const fetchCollectionData = async () => {
+		if (urlParse && urlParse.slug) {
+			try {
+				// Fetch data using tournament_id
+				const blogResponse = await fetch(`http://localhost:4500/games/counterblog_v2/${urlParse.slug}`, {
+
+				});
+
+				const returnedData = await blogResponse.json();
+
+				alert(JSON.stringify(returnedData));
+				setEventData(returnedData); // Assuming you only have one item in the array
+				setGameId(returnedData[0].game_id);
+				setGameName(returnedData[0].game_name);
+				setGameDescription(returnedData[0].game_description);
+			} catch (error) {
+				console.error('Error fetching data:', error.message);
+			}
+		}
+	};
+
+	fetchCollectionData();
+	}, []); // Empty dependency array means this effect runs once on mount
+
+	const handleInputChange = (e) => {
+		const target = e.target;
+		const value = target.type === 'checkbox' ? target.checked : target.value;
+		const name = target.name;
+		let clientError = false;
+
+		if (clientError != true) {
+
+			if (name === 'email') {
+				console.log(value);
+				setEmail(value);
+			}
+		}
+	};
 
 	const handleSubmit = () => {
-		alert('Hello submit');
+		alert('Hello submit' + email + ' slug => ' + urlParse.slug +
+			' gameId: ' + game_id +
+			' gameName: ' + game_name +
+			' gameDescription: ' + game_description
+
+		// gameId, gameName, email, count, token, sendMessage
+
+		);
+		resetCaptcha();
+		promises.push(urlEncode2('eventname', game_name));
+		promises.push(sendIt(
+			game_id,
+			game_name,
+			email,
+			count,
+			token));
+
+		Promise.all(promises)
+			.then((result) => {
+				console.log('Result:' + JSON.stringify(result));
+				promises = [];
+				allNew = [];
+			});
+
+
+		/*
+		promises.push(sendIt(
+			this.props.game_id,
+			this.props.game_name,
+			email,
+			count,
+			this.state.token,
+			this.props.onMessage));
+
+		this.setState({
+			emailAddr: '',
+			token: null,
+		});
+
+
+
+		/*
+				event.preventDefault();
+
+		// let token = this.captcha.getValue();
+
+		const sendMessage = this.props.onMessage;
+		let newsMessage = '';
+
+		if (this.state.token === null) {
+			newsMessage = 'Please check ReCAPTCHA';
+			sendMessage(newsMessage);
+			setTimeout(() => {
+				return sendMessage('');
+			}, messageWait);
+		}
+
+		promises.push(urlEncode2('eventname', this.props.game_name));
+		promises.push(sendIt(
+			this.props.game_id,
+			this.props.game_name,
+			this.state.emailAddr,
+			count,
+			this.state.token,
+			this.props.onMessage));
+
+		this.setState({
+			emailAddr: '',
+			token: null,
+		});
+
+
+		Promise.all(promises)
+			.then((result) => {
+				console.log('Result:' + JSON.stringify(result));
+				promises = [];
+				allNew = [];
+			});
+
+		setTimeout(() => {
+			allNew = [];
+		}, timeWait);
+		 */
+
 	};
 
 	return (
@@ -134,9 +269,11 @@ const InviteBlog = () => {
 						required
 						id="outlined-basic"
 						label="Email Address"
+						name="email"
 						variant="outlined"
 						size="small" // Set the size to small
 						fullWidth // Make the input take the full width
+						onChange={handleInputChange}
 					/>
 				<Grid container alignItems="center" justifyContent="center" style={{ height: '100%' }}>
 
