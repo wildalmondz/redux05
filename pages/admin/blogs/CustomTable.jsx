@@ -57,11 +57,7 @@ const rows = [
     createData('Brazil', 'BR', 210147125, 8515767),
 ];
 
-export default function ParticipationTable( {data}) {
-    const {
-        participation
-    } = data[0]; // Assuming you only have one item in the array
-
+export default function StickyHeadTable() {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -76,7 +72,6 @@ export default function ParticipationTable( {data}) {
 
     return (
         <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-            {JSON.stringify(participation)}
             <TableContainer sx={{ maxHeight: 440 }}>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>

@@ -1,4 +1,4 @@
-// dragtest/index.js
+// dragtest/index.old
 import React, { useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { MultiBackend } from 'react-dnd-multi-backend';

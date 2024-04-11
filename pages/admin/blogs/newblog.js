@@ -1,17 +1,52 @@
-// pages/categories/[...blogs].js
+// pages/admin/newblog.js
 import { useEffect, useState } from 'react';
-import { blogHandler } from "../../pages/api";
-import BlogHeader from "./BlogHeader";
 import { useRouter } from 'next/router';
+import { blogHandler } from "../../../pages/api";
 
-export default function Blogs({ blogContent, structuredUrl, companyDetails, slugListArray, blogListArray, idFound, likeCount }) {
+// Your React component
+const MyComponent = () => {
+    // Get the router instance
+    const router = useRouter();
 
+    // Extract path items as variables
+    const { pathname } = router;
+    const pathItems = pathname.split('/').filter(Boolean); // Remove empty strings
+
+    // Use the path items as variables
+    const firstPathItem = pathItems[0];
+    const secondPathItem = pathItems[1];
+    const thirdPathItem = pathItems[2];
+
+    return (
+        <div>
+            <p>First Path Item: {firstPathItem}</p>
+            <p>Second Path Item: {secondPathItem}</p>
+            <p>Third Path Item: {thirdPathItem}</p>
+        </div>
+    );
+};
+
+export default MyComponent;
+
+
+
+
+
+/*
+pass the companyId parameter to this component
+ */
+
+
+
+/*
+export default function Createblog({ }) {
     // Use state to track whether parameters are defined
     const [parametersDefined, setParametersDefined] = useState(false);
     const [idSearched, setIdSearched] = useState(false);
 
     const router = useRouter();
 
+    /*
     useEffect(() => {
         // Check if the necessary parameters are defined
 
@@ -24,9 +59,10 @@ export default function Blogs({ blogContent, structuredUrl, companyDetails, slug
 
     }, [blogContent, companyDetails, slugListArray, blogListArray, idFound]);
 
-    return (
-        <div>
-            {parametersDefined && (
+     */
+
+    /*
+                {parametersDefined && (
                 <>
                     <BlogHeader
                         companyDetails={companyDetails}
@@ -34,15 +70,22 @@ export default function Blogs({ blogContent, structuredUrl, companyDetails, slug
                         blogListArray={blogListArray}
                         blogContent={blogContent}
                         urlparse={structuredUrl}
-                        currentId={structuredUrl.post}
+                        currentId={structuredUrl.id}
                         likeCount={likeCount}
                     />
                 </>
             )}
+     */
+/*
+    return (
+        <div>
+            <h1>Hello Create Blog</h1>
         </div>
     );
 }
+*/
 
+/*
 export async function getStaticProps({ params }) {
     let companyDetails = {};
     let slugListArray = {};
@@ -55,19 +98,27 @@ export async function getStaticProps({ params }) {
     let idFound = false;
 
     const { blogs } = params;
+
     const structuredUrl = {
-        type: blogs[0] || '',
-        slug: blogs[1] || undefined,
-        post: blogs[2] || undefined,
+        company_id: '50',
+    };
+    /*
+    const structuredUrl = {
+        id: blogs[0] || '',
     };
 
-    if (!structuredUrl.slug) {
+
+
+    if (!structuredUrl.id) {
         console.log('No slug');
         return {
             notFound: true,
         };
     }
 
+ */
+
+    /*
     if (!structuredUrl.post) {
         // user did not have a particular blog id to provide
         console.log('No post');
@@ -88,6 +139,8 @@ export async function getStaticProps({ params }) {
         console.log('likeCount' + likeCount);
     }
 
+
+
     try {
         // console.log(`Here at blogData`);
         const blogData = await blogHandler(`http://localhost:4500/blog/v2/${structuredUrl.type}/${structuredUrl.slug}/`);
@@ -107,8 +160,11 @@ export async function getStaticProps({ params }) {
         console.log('likeCount: ' + likeCount);
     }
 
+
+
+
     if (!blogContent) {
-        console.log('No post found for article ' + structuredUrl.post);
+        console.log('No post found for article ' + structuredUrl.id);
 
         return {
             notFound: true,
@@ -117,28 +173,30 @@ export async function getStaticProps({ params }) {
 
     return {
         props: {
-            blogContent,
             structuredUrl,
-            companyDetails,
-            slugListArray,
-            blogListArray,
             idFound,
-            likeCount,
         },
     };
 }
+     */
 
+
+/*
 // this must be here unsure of why getStaticPaths is greyed in the IDE
 export async function getStaticPaths() {
-    const blogsData = await blogHandler(`http://localhost:4500/blog/post/fastfood/chicken/33`);
-    const blogs = blogsData.map(category => category.slug);
-
+    const blogData = await blogHandler(`http://localhost:4500/editblog/50`);
+    // const blogs = blogsData.map(category => category.slug);
+``
+    /*
     const paths = blogs.map((category) => ({
         params: { blogs: [category] },
     }));
 
+     */
+/*
     return {
-        paths,
+        blogData,
         fallback: false,
     };
 }
+*/

@@ -8,7 +8,7 @@ interface BlogResult {
     blog_title: string;
 }
 
-// index.tsx
+// index.old
 
 import { ReactElement } from 'react';
 import styles from '../styles/Home.module.css';

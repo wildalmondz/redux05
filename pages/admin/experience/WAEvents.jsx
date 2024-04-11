@@ -122,7 +122,6 @@ const Collection = ({ groupId, groupName, collectionName, game_name, setEventNam
                     alert('Square count [' + value + '] cannot be less than Almond count of [' + almond_count + ']');
                 }
                 else {
-
                 }
             }
 

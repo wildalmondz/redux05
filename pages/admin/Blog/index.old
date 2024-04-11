@@ -1,7 +1,7 @@
-//index.old
+//index.tsx
 import CenteredTabs from "./Tabs";
 
-export default function Experience(){
+export default function Blog(){
     return(
             <CenteredTabs />
     )

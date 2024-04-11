@@ -145,7 +145,7 @@ const InviteBlog = ({urlParse}) => {
 
 				const returnedData = await blogResponse.json();
 
-				alert(JSON.stringify(returnedData));
+				// alert(JSON.stringify(returnedData));
 				setEventData(returnedData); // Assuming you only have one item in the array
 				setGameId(returnedData[0].game_id);
 				setGameName(returnedData[0].game_name);
@@ -179,9 +179,6 @@ const InviteBlog = ({urlParse}) => {
 			' gameId: ' + game_id +
 			' gameName: ' + game_name +
 			' gameDescription: ' + game_description
-
-		// gameId, gameName, email, count, token, sendMessage
-
 		);
 		resetCaptcha();
 		promises.push(urlEncode2('eventname', game_name));

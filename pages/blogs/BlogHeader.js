@@ -545,7 +545,7 @@ const BlogHeader = ({ companyDetails, slugListArray, blogListArray, blogContent,
                             }}>
                                 <div id='blog-top'>
                                     <div id='blog-header'>
-                                        <div id='blog-title'><strong>{blogListArray.blogs[index].title}</strong></div>
+                                        <div id='blog-title' style={{fontSize: '1.25em'}}><strong>{blogListArray.blogs[index].title}</strong></div>
                                         <div id='blog-author'><strong>By: </strong><strong>{blogListArray.blogs[index].firstname}
                                             { ' ' }   {blogListArray.blogs[index].lastname}</strong></div>
                                         <div id='blog-date'>{prettyDate}</div>
@@ -560,8 +560,8 @@ const BlogHeader = ({ companyDetails, slugListArray, blogListArray, blogContent,
                         </Grid>
                     </Box>
                 </div>
-                <div style={{ borderTop: '1.5px solid #000', margin: '4em 0' }} />
-                <div>
+                <div style={{ paddingTop: '3px', margin: '4em 0' }} />
+                <div style={{ paddingTop: '3px', margin: '4em 0' }}>
                     {/*  */}
 
                     <Box sx={{ flexGrow: 1 }}>
@@ -573,7 +573,7 @@ const BlogHeader = ({ companyDetails, slugListArray, blogListArray, blogContent,
                                 whiteSpace: 'pre-wrap',  // Allow wrapping of long lines
                                 wordBreak: 'break-word',  // Break words to prevent overflow
                                 textAlign: 'justify',  // Justify text for a cleaner look
-                                lineHeight: '1.5',  // Set line height for better readability
+                                lineHeight: '1.25',  // Set line height for better readability
                             }}>
                                 <div style={{minHeight: '30em'}} dangerouslySetInnerHTML={{ __html: blogContent }} />
                                 <BlogArrows>

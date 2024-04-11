@@ -55,7 +55,7 @@ function BlogEntry(props) {
 		<div id='blog-segment'>
 			<div id='blog-top'>
 				<div id='blog-header'>
-					<div id='blog-title'><strong>{props.title}</strong></div>
+					<div id='blog-title' style={{fontSize: '2em'}}><strong>{props.title}</strong></div>
 					<div id='blog-author'><strong>By: </strong><strong> {props.firstname} {props.lastname}</strong></div>
 					<div id='blog-date'>{prettyDate}</div>
 				</div>
