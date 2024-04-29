@@ -47,7 +47,7 @@ export default function Events({
         if ((picksRemain != null) || (picksRemain != undefined)) {
             setPicksRemaining(picksRemain);
         }
-    }, [almonds, squares, locked]);
+    }, [almonds, squares, locked, picksRemain]);
 
     useEffect(() => {
         if (foundUserId != undefined) {

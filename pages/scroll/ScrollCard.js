@@ -12,7 +12,7 @@ import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import dynamic from 'next/dynamic';
-import BlogHeader from "@/blogs/BlogHeader";
+// import BlogHeader from "@/blogs/BlogHeader";
 import {blogHandler} from "@/api";
 
 const images = [

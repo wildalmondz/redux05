@@ -9,6 +9,7 @@ import FormLabel from "@mui/material/FormLabel";
 import {FormControlLabel, Radio, RadioGroup} from "@mui/material";
 import Button from "@mui/material/Button";
 import ProductTable from "./ProductTable";
+//import axios from "axios";
 
 const AdminPage = styled('div')({
     display: 'flex',
@@ -91,7 +92,7 @@ const Collection = ({ groupId, groupName, setCollectionName, setTournament_id, t
 
             if(tournament_id) {
 
-                alert('Update here!');
+                // alert('Update here!');
                 // set confirmation here
 
                 return fetch(`http://localhost:4500/updatetourney/${tournament_id}/${tournament_name}/${tournament_description}/${tournament_restriction}/${almond_count}/${tournament_status}/${square_count}/${expires}/${expired_status}`, {
@@ -113,8 +114,8 @@ const Collection = ({ groupId, groupName, setCollectionName, setTournament_id, t
 
             else {
                 alert('New add no tournament_id found'
-                + JSON.stringify(tournament)
-               +  'null' + ' '
+                    + JSON.stringify(tournament)
+                    +  'null' + ' '
                     +  ' new_tournament ' + new_tournament
                     +  ' tournament_description ' + tournament_description
                     +  ' tournament_restriction ' + tournament_restriction
@@ -124,19 +125,7 @@ const Collection = ({ groupId, groupName, setCollectionName, setTournament_id, t
                     +  ' writeExpires ' + writeExpires
                     +  ' expired_status '  + expired_status
                     +  ' id ' + companyId + ' ');
-                /*
-                this.props.onCreateTourney(
-                    'null',
-                    this.state.tournament_name,
-                    this.state.tournament_description,
-                    this.state.tournament_restriction,
-                    this.state.almond_count,
-                    this.state.tournament_status,
-                    this.state.square_count,
-                    writeExpires,
-                    this.state.expired_status,
-                    this.state.id);
-                    */
+
 
             }
         });
@@ -156,7 +145,7 @@ const Collection = ({ groupId, groupName, setCollectionName, setTournament_id, t
                     clientError = true;
                 }
                 else {
-                        setAlmond_count(value);
+                    setAlmond_count(value);
                 }
             }
 
@@ -230,7 +219,7 @@ const Collection = ({ groupId, groupName, setCollectionName, setTournament_id, t
                             onChange={(event, value) => {
                                 if (value) {
                                     if (value.tournament_name === '--New--') {
-                                        alert('Add a new Collection');
+                                        // alert('Add a new Collection');
                                         setNewCollection(true);
                                         setTournament_id('');
                                         setTournament('');
@@ -256,15 +245,15 @@ const Collection = ({ groupId, groupName, setCollectionName, setTournament_id, t
                     </div>
                     <section id="adminPage">
                         {(newCollection === true) ?
-                        <TextField
-                            required={true}
-                            label="Tournament Name"
-                            name="new_tournament"
-                            value={new_tournament}
-                            onChange={handleInputChange}
-                        />
+                            <TextField
+                                required={true}
+                                label="Tournament Name"
+                                name="new_tournament"
+                                value={new_tournament}
+                                onChange={handleInputChange}
+                            />
                             :
-                        <span>{ ''}</span> }
+                            <span>{ ''}</span> }
                         {(tournament_name === '' && newCollection === false) ?
                             <div>Select a company</div>
                             :
@@ -274,12 +263,12 @@ const Collection = ({ groupId, groupName, setCollectionName, setTournament_id, t
                                         <div className="flex-parent-element">
                                             <div className="flex-child-element green">
                                                 {(tournament_id) ?
-                                                <TextField
-                                                    label="Tournament Id"
-                                                    name="tournament_id"
-                                                    value={tournament_id}
-                                                    disabled
-                                                />
+                                                    <TextField
+                                                        label="Tournament Id"
+                                                        name="tournament_id"
+                                                        value={tournament_id}
+                                                        disabled
+                                                    />
                                                     :
                                                     <span>{' '}</span>}
                                                 <TextField
@@ -297,15 +286,15 @@ const Collection = ({ groupId, groupName, setCollectionName, setTournament_id, t
                                                 <br />
                                                 {(square_count != 0) ?
                                                     <div>
-                                                <TextField
-                                                    disabled
-                                                    id="outlined-number"
-                                                    label="Square Count"
-                                                    name="square_count"
-                                                    type="number"
-                                                    value={square_count}
-                                                    onChange={handleInputChange}
-                                                />
+                                                        <TextField
+                                                            disabled
+                                                            id="outlined-number"
+                                                            label="Square Count"
+                                                            name="square_count"
+                                                            type="number"
+                                                            value={square_count}
+                                                            onChange={handleInputChange}
+                                                        />
                                                         <TextField
                                                             label="Almond Count"
                                                             name="almond_count"
@@ -422,7 +411,7 @@ const Collection = ({ groupId, groupName, setCollectionName, setTournament_id, t
                     <div style={{width: '100%'}}>
                         {(newCollection === false) ?
                             <div>
-                                <ProductTable tournament_id={tournament_id} />
+                                <ProductTable groupId={groupId} tournament_id={tournament_id} />
                             </div>
                             :
                             <span>{' '}</span>

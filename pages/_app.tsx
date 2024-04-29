@@ -1,10 +1,12 @@
+// _app.tsx
 import '../styles/globals.css';
 import Link from 'next/link';
 import React from 'react';
 // import Container from '@mui/material/Container';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
+// import Typography from '@mui/material/Typography';
+import { Typography, TypographyProps } from '@mui/material';
 import footers from './api/footers';
 // import { AuthProvider } from './api/AuthContext';
 import AuthProvider from "@components/AuthProvider";
@@ -15,7 +17,7 @@ import AppBar from './home/AppBar';
 
 interface FooterItem {
     title: string;
-    description: { title: string; url: string }[];
+    description: [{ title: string; url: string }];
 }
 
 interface Footer {
@@ -28,7 +30,7 @@ interface AppProps {
     pageProps: any;
 }
 
-function Copyright(props: React.HTMLProps<HTMLParagraphElement>) {
+function Copyright(props: TypographyProps<'span'>) {
     return (
         <Typography variant="body2" color="text.secondary" align="center" {...props}>
             {'Copyright © '}
@@ -46,7 +48,6 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
         <>
             <AuthProvider>
                 <AppBar />
-                <MessageBoard02 text={undefined} />
                 <Component {...pageProps} />
             </AuthProvider>
             {/* Footer */}
@@ -59,24 +60,6 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
                     py: [3, 6],
                 }}
             >
-                <Grid container spacing={4} justifyContent="space-evenly">
-                    {footers.map((footer: Footer) => (
-                        <Grid item xs={6} sm={3} key={footer.title}>
-                            <Typography variant="h6" color="text.primary" gutterBottom>
-                                {footer.title}
-                            </Typography>
-                            <ul>
-                                {footer.description.map((item) => (
-                                    <li key={item.title}>
-                                        <Link href={item.url} variant="subtitle1" color="text.secondary">
-                                            {item.title}
-                                        </Link>
-                                    </li>
-                                ))}
-                            </ul>
-                        </Grid>
-                    ))}
-                </Grid>
                 <Copyright sx={{ mt: 5 }} />
             </Container>
             {/* End footer */}

@@ -56,6 +56,10 @@ export default function Page() {
             setExpiredStatus(value);
         }
 
+        if (name === 'blog_status') {
+            setBlogStatus(value);
+        }
+
     }
 
     const handleSaveButtonClick = () => {
@@ -63,10 +67,13 @@ export default function Page() {
         if ((blogTitle === '') ||
             (blogTitle === undefined) ||
             (blogTitle == null) ||
+            (blogStatus === '') ||
+            (blogStatus === undefined) ||
+            (blogStatus == null) ||
             (textFieldValue === '') ||
             (textFieldValue === undefined) ||
             (textFieldValue == null)) {
-            alert('Blog Title and Text Required');
+            alert('Blog_old Title Status and Text Required');
         }
         else {
             try {

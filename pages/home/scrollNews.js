@@ -102,7 +102,7 @@ export default function ScrollNews() {
                 fontSize="large"
                 gutterBottom
             >
-                Jump right to a winery to see what's new!
+                Jump right to a winery to see what&#39;s new!
             </Typography>
         <Box sx={styles.root}>
             <Tabs

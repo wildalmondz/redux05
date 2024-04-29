@@ -1,5 +1,4 @@
-// profileUtils.js
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../src/redux/store";
 import { updateProfile } from "../../src/redux/features/auth-slice";
@@ -41,3 +40,18 @@ export const useProfileData = () => {
         isLoggedIn: authState.isLoggedIn || false,
     };
 };
+
+const ProfileComponent = () => {
+    const { username, user_id, isLoggedIn } = useProfileData();
+
+    return (
+        <div>
+            <h2>User Profile</h2>
+            <p>Username: {username}</p>
+            <p>User ID: {user_id}</p>
+            <p>Is Logged In: {isLoggedIn ? 'Yes' : 'No'}</p>
+        </div>
+    );
+};
+
+export default ProfileComponent;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -7,24 +7,14 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+import Button from "@mui/material/Button";
 
 const testData = [
-    {"square_id":1607,"square_name":"Cab Sauv","square_status":"active","image_path":"https://wildalmonds.com/api/uploads/52842df1-2375-4f8b-8f71-df5fb71d8393_redWine.png"},
-    {"square_id":1608,"square_name":"Merlot","square_status":"active","image_path":"https://wildalmonds.com/api/uploads/66e1a796-a775-48d1-a57d-ac336654a38d_redWine03.png"},
-    {"square_id":1609,"square_name":"Riesling","square_status":"active","image_path":"https://wildalmonds.com/api/uploads/77b9e095-4f31-4b61-bbdf-143352509f3a_whiteWine.png"},
-    {"square_id":1610,"square_name":"Pinot Gris","square_status":"active","image_path":"https://wildalmonds.com/api/uploads/2085d046-1771-4eb3-9ea3-1668f2024cf0_whiteWine02.png"},
-    {"square_id":1611,"square_name":"Malbec","square_status":"active","image_path":"https://wildalmonds.com/api/uploads/66e1a796-a775-48d1-a57d-ac336654a38d_redWine03.png"},
-    {"square_id":1624,"square_name":"Thoughts","square_status":"active","image_path":"https://wildalmonds.com/api/uploads/080a2429-e171-4404-800f-d5df20f382f5_waNoBack.png"},
-    {"square_id":1626,"square_name":"Filler square 01","square_status":"active","image_path":null},
-    {"square_id":1627,"square_name":"Filler square 02","square_status":"active","image_path":null},
-    {"square_id":1628,"square_name":"Filler square 03","square_status":"active","image_path":null},
-    {"square_id":1629,"square_name":"Filler square 04","square_status":"active","image_path":null},
-    {"square_id":1630,"square_name":"Filler square 05","square_status":"active","image_path":null},
-    {"square_id":1631,"square_name":"Filler square 06","square_status":"active","image_path":null},
-    {"square_id":1632,"square_name":"joinTest","square_status":"active","image_path":null}
+   {"square_id":1632,"square_name":"joinTest","square_status":"active","image_path":null}
 ];
 
 const columns = [
+    { id: 'square_id', label: 'Id', minWidth: 40, align: 'center' },
     { id: 'square_name', label: 'Square Name', minWidth: 170, align: 'center' },
     { id: 'square_description', label: 'Description', minWidth: 370, align: 'left' },
     {
@@ -44,9 +34,10 @@ const columns = [
     }
 ];
 
-export default function ProductTable({ data, tournament_id }) {
+export default function ProductTable({ groupId, tournament_id }) {
     // Use testData as the initial state for productData
     const [productData, setProductData] = useState(testData);
+   // const [productData, setProductData] = useState('');
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -58,12 +49,14 @@ export default function ProductTable({ data, tournament_id }) {
             if (tournament_id !== '') {
                 try {
                     // Fetch data using tournament_id
-                    const collectionResponse = await fetch(`http://localhost:4500/admintournament_v2/${tournament_id}`, {
+                    // const collectionResponse = await fetch(`http://localhost:4500/admintournament_v2/${tournament_id}`, {
+                    const collectionResponse = await fetch(`http://localhost:4500/admin/products`, {
                         credentials: 'include', // Include credentials in the request
                     });
 
                     const returnedData = await collectionResponse.json();
-                    setProductData(returnedData[2]); // Assuming you only have one item in the array
+                    console.log(JSON.stringify(returnedData));
+                    setProductData(returnedData); // Assuming you only have one item in the array
                 } catch (error) {
                     console.error('Error fetching data:', error.message);
                 }
@@ -80,6 +73,15 @@ export default function ProductTable({ data, tournament_id }) {
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(+event.target.value);
         setPage(0);
+    };
+
+    const handleNewClick = () => {
+        if (groupId === 0) {
+            alert('Company/Group selection required to create items or products.')
+        }
+        else {
+            window.location.href = `./createproduct/editor/${groupId}`;
+        }
     };
 
     const handleSort = (columnId) => {
@@ -107,6 +109,15 @@ export default function ProductTable({ data, tournament_id }) {
 
     return (
         <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+            <Button
+                type="submit"
+                variant="contained"
+                onClick={handleNewClick}
+                style={{ height: '2em', marginLeft: '.5%' }}
+            >
+                New
+            </Button>
+            <br />
             <TableContainer sx={{ maxHeight: 440 }}>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
@@ -139,10 +150,24 @@ export default function ProductTable({ data, tournament_id }) {
                                         {columns.map((column) => {
                                             const value = row[column.id];
                                             return (
+                                                /*
                                                 <TableCell key={column.id} align={column.align}>
                                                     {column.format && typeof value === 'number'
                                                         ? column.format(value)
                                                         : value}
+                                                </TableCell>
+
+
+                                                 */
+
+                                                <TableCell key={column.id} align={column.align}>
+                                                    {column.id === 'image_path' ? (
+                                                        value ? <img src={value} alt="Product" style={{ width: '50px', height: '50px' }} /> : 'No Image'
+                                                    ) : (
+                                                        column.format && typeof value === 'number'
+                                                            ? column.format(value)
+                                                            : value
+                                                    )}
                                                 </TableCell>
                                             );
                                         })}

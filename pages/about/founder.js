@@ -1,3 +1,4 @@
+import Image from 'next/image';
 
 export default function Founder({ }) {
 
@@ -36,10 +37,11 @@ export default function Founder({ }) {
                     </ul>
                 </div>
                 <div id="mid-picture" >
-                    <img
+                    <Image
                         src="https://wildalmonds.com/api/uploads/52ad340c-8a5f-4e99-8b85-e6b174e5e1f0_IMG_4058.jpg"
-                        className="card-img-top img-fluid"
-                        id="mid-img"
+                        width={500}
+                        height={500}
+                        alt="Founder picture"
                     />
                 </div>
             </div>

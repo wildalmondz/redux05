@@ -146,7 +146,7 @@ const Scroll = ({ results }) => {
 }
 
 export async function getStaticProps() {
-    const results = await handler(`http://localhost:4500/blog/frontblogs_v2`);
+    const results = await handler(`http://localhost:4500/blog/frontblogs_v3`);
     // The value of the `props` key will be
     //  passed to the component
     return {

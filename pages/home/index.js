@@ -2,6 +2,8 @@ import React, { useRef } from "react";
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
+import Image from 'next/image';
+
 
 const images = [
     { thumbnail: { uri: 'https://wildalmonds.com/api/uploads/12d7fb07-5f3f-42a3-9519-baeaee476df7_Airfield.png',name:'airfield'}},
@@ -52,7 +54,12 @@ const Cats = () => {
             >
                 {images.map((image, index) => (
                     <ImageListItem key={index}>
-                        <img src={image.thumbnail.uri} alt={image.thumbnail.name} />
+                        <Image
+                            src={image.thumbnail.uri}
+                            alt={image.thumbnail.name}
+                            width={70}
+                            height={70}
+                        />
                         <ImageListItemBar title={image.thumbnail.name} />
                     </ImageListItem>
                 ))}

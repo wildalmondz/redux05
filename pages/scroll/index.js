@@ -1,21 +1,14 @@
-import React, { useRef, useEffect, useState } from "react";
-import ChildComponent from './ChildComponent';
-import ScrollCard from './ScrollCard';
+import React, { useState } from "react";
 import Link from '@mui/material/Link';
 import NextLink from 'next/link';
 import Box from "@mui/material/Box";
-import TagFacesIcon from "@mui/icons-material/TagFaces";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
-import ImageListItem from "@mui/material/ImageListItem";
-import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import dynamic from 'next/dynamic';
-import Layout from "../../components/Layout"
 import { handler } from "../api"
 
 
@@ -57,7 +50,6 @@ const DynamicCard = dynamic(() => import('@mui/material/Card'), { ssr: false });
 const Scroll = ({ results }) => {
 
     const [chipData, setChipData] = useState(results);
-    let [imagePath, setImagePath] = useState('https://wildalmonds.com/api/uploads/2a432b2a-5862-46ca-adcf-eac67a0c20ab_wildAlmondsLogo.jpeg');
 
     return (
         <Container sx={{ py: 8 }} maxWidth="xl">
@@ -142,14 +134,8 @@ const Scroll = ({ results }) => {
 }
 
 export async function getStaticProps() {
-    // const API_KEY = "9hUvOqGGdnCBvGKg4EB3L7mGdBC8hKKJ"
+    const results = await handler(`http://localhost:4500/blog/frontblogs_v3`);
 
-    // const results = await handler(`https://api.nytimes.com/svc/topstories/v2/home.json?api-key=${API_KEY}`
-    // )
-
-    const results = await handler(`http://localhost:4500/blog/frontblogs_v2`);
-    // The value of the `props` key will be
-    //  passed to the component
     return {
         props: {
             results
@@ -157,32 +143,4 @@ export async function getStaticProps() {
     }
 }
 
-/*
-// to register for a new New York Times API KEY, visit :
-const API_KEY = "9hUvOqGGdnCBvGKg4EB3L7mGdBC8hKKJ"
-export async function getStaticProps() {
-
-    const results = await handler(`https://api.nytimes.com/svc/topstories/v2/home.json?api-key=${API_KEY}`
-    )
-    // The value of the `props` key will be
-    //  passed to the `Home` component
-    return {
-        props: {
-            results
-        }
-    }
-}
-
- */
-
-/*
-export default function rtest()  {
-    const data = "Hello from ParentComponent";
-
-    return (
-        <ChildComponent data={data} />
-    );
-};
-
- */
 export default Scroll;

@@ -7,7 +7,6 @@ import {Radio, RadioGroup} from "@mui/material";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import {Editor} from "@tinymce/tinymce-react";
 import Button from "@mui/material/Button";
-import axios from "axios";
 
 let allNew = [];
 let promises = [];
@@ -145,7 +144,7 @@ export default function BlogEdit({ blogId }){
             (textFieldValue === '') ||
             (textFieldValue === undefined) ||
             (textFieldValue == null)) {
-            alert('Blog Title and Text Required');
+            alert('Blog_old Title and Text Required');
         }
         else {
             try {

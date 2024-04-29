@@ -1,4 +1,3 @@
-// dragtest/Almond.jsx
 import React, { useState, useEffect } from 'react';
 import { useDrag } from 'react-dnd';
 import { styled } from '@mui/material/styles';
@@ -9,7 +8,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
-import {useRouter} from "next/router";
+import { useRouter } from "next/router";
 import fixDate from "../../src/lib/fixDate";
 
 const EachAlmond = styled('div')({
@@ -42,20 +41,20 @@ const InnerDot = styled('span')({
 })
 
 const Almond = ({
-        item,
-        gameId,
-        userId,
-        email,
-        isDropped,
-        handleDrop,
-        canDeletePick,
-        lockedStatus,
-        expired,
-        isExpired,
-        tokenColor,
-        droppedItem,
-        droppedColor,
-        curLocked}) => {
+                    item,
+                    gameId,
+                    userId,
+                    email,
+                    isDropped,
+                    handleDrop,
+                    canDeletePick,
+                    lockedStatus,
+                    expired,
+                    isExpired,
+                    tokenColor,
+                    droppedItem,
+                    droppedColor,
+                    curLocked}) => {
 
     const [open, setOpen] = useState(false);
     const [canDrop, setDrop] = useState(true);
@@ -64,6 +63,7 @@ const Almond = ({
 
     const router = useRouter();
 
+    // Moved the useEffect call outside of the conditional statement
     useEffect(() => {
         const fetchData = async () => {
 
@@ -90,7 +90,7 @@ const Almond = ({
 
         // Call the async function immediately
         fetchData();
-    }, [isDropped, droppedItem]);
+    }, [isDropped, droppedItem, canDrop, curLocked, droppedColor, resetPick]);
 
 
     // const isActive = isOver && canDrop;
@@ -99,12 +99,6 @@ const Almond = ({
     let border = 'black';
     let color = '#705856';
     let opacity = 1;
-    let almond;
-
-
-    if (item.name) {
-        almond = item.name;
-    }
 
     if (!item) { return null; }
 
@@ -125,7 +119,7 @@ const Almond = ({
         }
     };
 
-    const handleClose = () => {
+    handleClose = () => {
         setOpen(false);
     };
 
@@ -142,6 +136,7 @@ const Almond = ({
         opacity = 0.7;
     }
 
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [{ isDragging }, drag] = useDrag({
         type: 'draggableItem', // Make sure the type is defined
         item: { ...item },
@@ -159,7 +154,6 @@ const Almond = ({
         }),
     });
 
-
     const draggedStyle = {
         opacity: isDragging ? 0.5 : 1,
         cursor: isDropped ? 'not-allowed' : 'move',
@@ -172,27 +166,27 @@ const Almond = ({
 
     return (
         <>
-        <Dialog
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-        >
-            <DialogTitle id="alert-dialog-title">
-                {"Reset this pick?"}
-            </DialogTitle>
-            <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                    Choose RESET to make a new select with this token or CANCEL to keep the current pick.
-                </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={handleReset} autoFocus>
-                    Reset
-                </Button>
-                <Button onClick={handleClose}>Cancel</Button>
-            </DialogActions>
-        </Dialog>
+            <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {"Reset this pick?"}
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        Choose RESET to make a new select with this token or CANCEL to keep the current pick.
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleReset} autoFocus>
+                        Reset
+                    </Button>
+                    <Button onClick={handleClose}>Cancel</Button>
+                </DialogActions>
+            </Dialog>
             <EachAlmond onClick={handleAlmondClick}>
                 <OuterDot style={{ backgroundColor:curColor}}>
                     <InnerDot
@@ -206,10 +200,10 @@ const Almond = ({
                             ref={drag}
                             style={draggedStyle}
                             aria-disabled={canDrop}
-                            >
+                        >
                             {
                                 canDrop != true ?
-                                        <i><s>{item.name}</s></i> :
+                                    <i><s>{item.name}</s></i> :
                                     item.name
                             }
 
@@ -222,6 +216,3 @@ const Almond = ({
 };
 
 export default Almond;
-
-
-

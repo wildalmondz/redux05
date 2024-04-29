@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import '../Company/stylesheet/CompanyReport.scss';
+import '../../../../../../sandbox/Company/stylesheet/CompanyReport.scss';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';

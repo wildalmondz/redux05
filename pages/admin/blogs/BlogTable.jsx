@@ -77,7 +77,7 @@ export default function BlogTable({ groupId, setBlogId, setBlogEditor }) {
 
 
     const handleNewClick = () => {
-        window.location.href = `./blogs/blogcreate/${groupId}`;
+        window.location.href = `./createblog/editor/${groupId}`;
     };
 
     const handleCellClick = (columnId, cellValue) => {

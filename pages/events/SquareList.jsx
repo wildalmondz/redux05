@@ -1,10 +1,14 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import DropZoneComponent from "./DropZoneComponent";
-import ItemTypes from "./ItemTypes";
+
+const ItemTypes = {
+	ALMOND: 'almond',
+	ROUND: 'round',
+};
 
 const Item = styled(Paper)(({ theme }) => ({
 	backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -49,12 +53,23 @@ const SquareList = ({
 						textFieldValue,
 						squareComment
 					}) => {
+
+	const [foundSquare, setFoundSquare] = useState('');
+	const [squareSet, setSquareSet] = useState('');
+
+
+	if ((squareDetails) && squareSet === 0) {
+		setFoundSquare(squareDetails);
+		setSquareSet(1);
+	}
+
+
 	return (
 		<Box sx={{ flexGrow: 1 }} style={{maxHeight: '200px'}}>
 			<Grid container spacing={0.5} >
-				{(squareDetails.length === 0) ?
+				{(foundSquare.length === 0) ?
 					<p>{' '}</p> :
-					squareDetails.map(square =>
+					foundSquare.map(square =>
 						<Grid container spacing={0.5} key={square.id} item xs={3} sm={2} md={1.5} lg={1} sx={{ height: '8.75em' }}>
 							<DropZoneComponent
 								key={square.square_id}  // Assign a unique key to DropZoneComponent

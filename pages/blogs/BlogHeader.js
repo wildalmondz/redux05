@@ -114,9 +114,11 @@ const ArrowImg = styled('img')({
 const findIndexById = (dataArray, currentId) => {
     const idNumber = Number(currentId);
 
-    const index = dataArray.findIndex(item => item.id === idNumber);
-    console.log('index: [' + index + ']');
-    return index !== -1 ? index : null;
+    if (dataArray) {
+        const index = dataArray.findIndex(item => item.id === idNumber);
+        console.log('index: [' + index + ']');
+        return index !== -1 ? index : null;
+    }
 };
 
 function PrevCo(props) {
@@ -155,8 +157,11 @@ function NextCo(props) {
 
 const BlogHeader = ({ companyDetails, slugListArray, blogListArray, blogContent, urlparse, currentId, likeCount }) => {
 
+    let companyInfo;
 
-    const companyInfo = companyDetails.company[0];
+    if (companyDetails) {
+        companyInfo = companyDetails.company[0];
+    }
 
     const [likes, setLikes] = useState(0); // State for managing likes
     let [idNext, setIdNext] = useState(false); // State for managing routing
@@ -185,10 +190,10 @@ const BlogHeader = ({ companyDetails, slugListArray, blogListArray, blogContent,
     if ((index !== null) && (foundDirection === false)) {
         console.log(` The next element with id ${startId} is found at index ${index}`);
         // set the startId to the next Id the user is routing to.
-        if ((dataArray[index].id) && (dataArray[index + 1])) {
+        if ((dataArray && dataArray[index].id) && (dataArray[index + 1])) {
             console.log('Next id is...' + dataArray[index + 1].id)
         }
-        if ((dataArray[index].id) && (dataArray[index - 1])) {
+        if ((dataArray && dataArray[index].id) && (dataArray[index - 1])) {
             console.log('Previous id is...' + dataArray[index - 1].id)
             console.log('Previous index is...' + (index - 1))
             setBlogPrev(dataArray[index - 1].id);
@@ -227,7 +232,7 @@ const BlogHeader = ({ companyDetails, slugListArray, blogListArray, blogContent,
                 setIdNext(idNext = false);
             }
 
-            if (blogListArray.blogs.length <= 1){
+            if (blogListArray && blogListArray.blogs.length <= 1){
                 console.log('Next disable: ' + (blogListArray.blogs.length - 1));
                 setDisableBlogNext(true);
             }
@@ -241,8 +246,9 @@ const BlogHeader = ({ companyDetails, slugListArray, blogListArray, blogContent,
                     console.error('Error fetching blog:', error);
                 }
             }
-
-            setPrettyDate(fixDate(blogListArray.blogs[index].createdAt, true));
+            if (blogListArray && blogListArray.blogs) {
+                setPrettyDate(fixDate(blogListArray.blogs[index].createdAt, true));
+            }
         };
 
         // Call the async function immediately
@@ -500,7 +506,7 @@ const BlogHeader = ({ companyDetails, slugListArray, blogListArray, blogContent,
                             <Grid item xs={6}>
                                 <StyledItem>
                                     <BackgroundImage />
-                                    <OverlayText>{companyInfo.name}</OverlayText>
+                                    {companyInfo ? <OverlayText>{companyInfo.name}</OverlayText> : null}
                                     <CompanyArrows>
                                         <span id='nextCursor'>
                                             <PrevCo toggle={(event) => togglePrevCompany(event)}
@@ -545,10 +551,14 @@ const BlogHeader = ({ companyDetails, slugListArray, blogListArray, blogContent,
                             }}>
                                 <div id='blog-top'>
                                     <div id='blog-header'>
-                                        <div id='blog-title' style={{fontSize: '1.25em'}}><strong>{blogListArray.blogs[index].title}</strong></div>
-                                        <div id='blog-author'><strong>By: </strong><strong>{blogListArray.blogs[index].firstname}
-                                            { ' ' }   {blogListArray.blogs[index].lastname}</strong></div>
-                                        <div id='blog-date'>{prettyDate}</div>
+                                        {blogListArray ?
+                                            <div>
+                                            <div id='blog-title' style={{fontSize: '1.25em'}}><strong>{blogListArray.blogs[index].title}</strong></div>
+                                            <div id='blog-author'><strong>By: </strong><strong>{blogListArray.blogs[index].firstname}
+                                                { ' ' }   {blogListArray.blogs[index].lastname}</strong></div>
+                                            <div id='blog-date'>{prettyDate}</div>
+                                            </div>
+                                            : null}
                                     </div>
                                 </div>
 

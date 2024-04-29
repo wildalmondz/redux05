@@ -12,7 +12,7 @@ import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import dynamic from 'next/dynamic';
-import BlogHeader from "@/blogs/BlogHeader";
+// import BlogHeader from "@/blogs/BlogHeader";
 import {blogHandler, handler} from "@/api";
 
 const images = [
@@ -158,7 +158,7 @@ const Scroll = ({ results }) => {
 }
 
 export async function getStaticProps() {
-        let results = await handler(`http://localhost:4500/blog/frontblogs_v2`);
+        let results = await handler(`http://localhost:4500/blog/frontblogs_v3`);
         // The value of the `props` key will be
         //  passed to the component
         console.log(results);

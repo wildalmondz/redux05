@@ -15,7 +15,9 @@ const Instructions = () => {
                 <br />
                 If the user is Admin then allow to add a new company to the company list
                 <br />
-
+                Fix the Collection issue add Collection_new with new code and retro with Collection info
+                < br/>
+                Be sensitive to the axios import issue!!
             </p>
         </>
     );

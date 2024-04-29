@@ -11,12 +11,12 @@ export default function Terms({ }) {
                 <br />
                 <br />
                 <strong>THE AGREEMENT:</strong> The use of this website and services on this website
-                provided by WildAlmonds (hereinafter referred to as "Company") are subject
-                to the following Terms & Conditions (hereinafter the "Agreement"), all
+                provided by WildAlmonds (hereinafter referred to as &#34;Company&#34;) are subject
+                to the following Terms & Conditions (hereinafter the &#34;Agreement&#34;), all
                 parts and sub-parts of which are specifically incorporated by reference
                 here. This Agreement shall govern the use of all pages on this website
-                (hereinafter collectively referred to as "Website") and any services
-                provided by or on this Website ("Services").
+                (hereinafter collectively referred to as &#34;Website&#34;) and any services
+                provided by or on this Website (&#34;Services&#34;).
                 <br />
                 <br />
                 <strong>1) DEFINITIONS</strong> The parties referred to in this Agreement shall be defined
@@ -47,7 +47,7 @@ export default function Terms({ }) {
                 information as a result of Your use of the Website or Services. Such
                 information may include, but is not limited to, documentation, data, or
                 information developed by the Company, and other materials which may assist
-                in Your use of the Website or Services ("Company Materials"). Subject to
+                in Your use of the Website or Services (&#34;Company Materials&#34;). Subject to
                 this Agreement, the Company grants You a non-exclusive, limited,
                 non-transferable and revocable license to use the Company Materials solely
                 in connection with Your use of the Website and Services. The Company
@@ -59,7 +59,7 @@ export default function Terms({ }) {
                 <strong>4) INTELLECTUAL PROPERTY</strong> You agree that the Website and all Services
                 provided by the Company are the property of the Company, including all
                 copyrights, trademarks, trade secrets, patents, and other intellectual
-                property ("Company IP"). You agree that the Company owns all right, title
+                property (&#34;Company IP&#34;). You agree that the Company owns all right, title
                 and interest in and to the Company IP and that You will not use the
                 Company IP for any unlawful or infringing purpose. You agree not to
                 reproduce or distribute the Company IP in any way, including
@@ -69,7 +69,7 @@ export default function Terms({ }) {
                 available to You, You hereby grant the Company a royalty-free,
                 non-exclusive, worldwide license to copy, display, use, broadcast,
                 transmit and make derivative works of any content You publish, upload, or
-                otherwise make available to the Website ("Your Content"). The Company
+                otherwise make available to the Website (&#34;Your Content&#34;). The Company
                 claims no further proprietary rights in Your Content. b) If You feel that
                 any of Your intellectual property rights have been infringed or otherwise
                 violated by the posting of information or media by another of Our users,
@@ -100,7 +100,7 @@ export default function Terms({ }) {
                 <br />
                 a) You further agree not to use the Website or Services:
                 <br />
-                I) To harass, abuse, or threaten others or otherwise violate any person's
+                I) To harass, abuse, or threaten others or otherwise violate any person&#39;s
                 legal rights;
                 <br />
                 II) To violate any intellectual property rights of the Company or any
@@ -178,7 +178,7 @@ export default function Terms({ }) {
                 <br />
                 <strong>11) INDEMNIFICATION</strong> You agree to defend and indemnify the Company and any
                 of its affiliates (if applicable) and hold Us harmless against any and all
-                legal claims and demands, including reasonable attorney's fees, which may
+                legal claims and demands, including reasonable attorney&#39;s fees, which may
                 arise from or relate to Your use or misuse of the Website or Services,
                 Your breach of this Agreement, or Your conduct or actions. You agree that
                 the Company shall be able to select its own legal counsel and may
@@ -186,7 +186,7 @@ export default function Terms({ }) {
                 <br />
                 <br />
                 <strong>12) SPAM POLICY</strong> You are strictly prohibited from using the Website or any
-                of the Company's Services for illegal spam activities, including gathering
+                of the Company&#39;s Services for illegal spam activities, including gathering
                 email addresses and personal information from others or sending any mass
                 commercial emails.
                 <br />
@@ -254,7 +254,7 @@ export default function Terms({ }) {
                 <br />
                 <strong>18) NO WARRANTIES</strong> You agree that Your use of the Website and Services is
                 at Your sole and exclusive risk and that any Services provided by Us are
-                on an "As Is" basis. The Company hereby expressly disclaims any and all
+                on an &#34;As Is&#34; basis. The Company hereby expressly disclaims any and all
                 express or implied warranties of any kind, including, but not limited to
                 the implied warranty of fitness for a particular purpose and the implied
                 warranty of merchantability. The Company makes no warranties that the
@@ -353,7 +353,7 @@ export default function Terms({ }) {
                 permitted to both Parties under this Agreement, including e-mail or fax.
                 <br />
                 <br />
-                For any questions or concerns, please email Us at the following address:
+                For any questions or concerns, please email us at the following address:
                 <br />
                 <a href="mailto:support@wildalmonds.com">support@wildalmonds.com</a>
                 <br />

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import axios from "axios";
-import NavBarxx from '../comps/NavBarxx'
 
 export default function Register() {
 
@@ -21,7 +20,6 @@ export default function Register() {
 
     return (
          <div>
-             <NavBarxx></NavBarxx>
            <h1>Register</h1>
              <input type="text" name="username" placeholder="username" onChange={e => setRegisterUsername(e.target.value)}></input>
              <input type="password" name="password" placeholder="password" onChange={e => setRegisterPassword(e.target.value)}></input>

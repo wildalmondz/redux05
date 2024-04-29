@@ -5,15 +5,15 @@
 
 import { useState } from "react";
 import axios from "axios";
-import { useDispatch } from "react-redux";
-import { logIn, logOut, toggleModerator } from "../../src/redux/features/auth-slice";
-import { AppDispatch, useAppSelector } from "../../src/redux/store";
+// import { useDispatch } from "react-redux";
+// import { logIn, logOut, toggleModerator } from "../../src/redux/features/auth-slice";
+// import { AppDispatch, useAppSelector } from "../../src/redux/store";
 import { useRouter } from 'next/router';
 
 export default function Login() {
     const router = useRouter();
-    const dispatch = useDispatch<AppDispatch>();
-    const isAuth = useAppSelector((state) => state.authReducer.value.isAuth);
+    // const dispatch = useDispatch<AppDispatch>();
+    // const isAuth = useAppSelector((state) => state.authReducer.value.isAuth);
 
     const [loginUsername, setLoginUsername] = useState('');
     const [loginPassword, setLoginPassword] = useState('');
@@ -59,7 +59,7 @@ export default function Login() {
                     console.log("No name found in the string.");
                 }
 
-                dispatch(logIn(extractedName));
+                // dispatch(logIn(extractedName));
                 // dispatch(logIn(user_id));
                 router.push("/admin/experience");
             }
@@ -73,15 +73,6 @@ export default function Login() {
             <input type="password" name="password" placeholder="password" onChange={e => setLoginPassword(e.target.value)}></input>
             <button onClick={login}>Login</button>
             <br />
-            <div>
-                {isAuth && (
-                    <>
-                        <button onClick={() => dispatch(logOut())}>Log Out</button>
-                        <br />
-                        <button onClick={() => dispatch(toggleModerator())}>Toggle Moderator Status</button>
-                    </>
-                )}
-            </div>
         </div>
     );
 }

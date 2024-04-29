@@ -42,12 +42,21 @@ const columns = [
 ];
 
 export default function ParticipationTable({ data }) {
-    const { participation } = data[0]; // Assuming you only have one item in the array
 
+    const [participation, setParticipation] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [orderBy, setOrderBy] = React.useState('');
     const [order, setOrder] = React.useState('asc');
+
+    const [foundData, setFoundData] = React.useState(false);
+
+    React.useEffect(() => {
+        if (data && !foundData) {
+            setParticipation(data[0]); // Assuming you only have one item in the array
+            setFoundData(true);
+        }
+    }, [data, foundData]);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);

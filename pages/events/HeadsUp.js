@@ -51,7 +51,7 @@ const HeadsUp = ({ expired, picksRemaining, lockedStatus, gameId, userId, curLoc
     if (lockedStatus !== 'unlocked') {
       setCurLocked('locked');
     }
-  }, [lockedStatus]);
+  }, [lockedStatus, setCurLocked]);
 
   useEffect(() => {
     const fetchData = async () => {

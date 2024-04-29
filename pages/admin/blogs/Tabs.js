@@ -14,7 +14,7 @@ export default function CenteredTabs() {
     const [groupName, setGroupName] = useState('Company/Group');
     const [blogId, setBlogId] = useState('');
     const [blogEditor, setBlogEditor] = useState(false);
-    const [blogName, setBlogName] = useState('Select Blog');
+    const [blogName, setBlogName] = useState('Select Blog_old');
     const [editTitle, setEditTitle] = useState('Editor');
     const [foundGroup, setFoundGroup] = useState(false);
     const [foundBlog, setFoundBlog] = useState(false);
@@ -37,13 +37,13 @@ export default function CenteredTabs() {
     }, []); // Empty dependency array means this effect runs once on mount
 
     const handleChange = (event, newValue) => {
-        if (newValue === 2) { setBlogName('Select Blog') }
+        if (newValue === 2) { setBlogName('Select Blog_old') }
         if (newValue === 3) { setEditTitle('Editor') }
         setValue(newValue);
     };
 
-    if ((groupName !== 'Company/Group') && (blogName !== 'Select Blog') && (!foundGroup)) {
-        setBlogName('Select Blog');
+    if ((groupName !== 'Company/Group') && (blogName !== 'Select Blog_old') && (!foundGroup)) {
+        setBlogName('Select Blog_old');
         setFoundGroup(true);
     }
 

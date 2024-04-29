@@ -144,7 +144,7 @@ export default function TinyMCE() {
             (textFieldValue === '') ||
             (textFieldValue === undefined) ||
             (textFieldValue == null)) {
-            alert('Blog Title and Text Required');
+            alert('Blog_old Title and Text Required');
         }
         else {
             try {

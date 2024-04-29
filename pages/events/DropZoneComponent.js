@@ -1,8 +1,11 @@
 // dragtest/DropZoneComponent.js
 import React, { useEffect, useState } from 'react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend'; // Import the HTML5 backend
 import { useDrop } from 'react-dnd';
 import {styled} from "@mui/material/styles";
 import axios from "axios";
+import Image from 'next/image';
 
 const ItemTypes = {
     DRAGGABLE_ITEM: 'draggableItem',
@@ -193,7 +196,12 @@ const DropZoneComponent = ({
 
             )}
             {image && (
-                <img src={image} width="70" height="70" />
+                <Image
+                    src={image}
+                    width={70}
+                    height={70}
+                    alt="Item picture"
+                />
             )}
             {almondDisplay}
         </div>
@@ -201,4 +209,10 @@ const DropZoneComponent = ({
     );
 };
 
-export default DropZoneComponent;
+const DropZoneComponentWithDndProvider = (props) => (
+    <DndProvider backend={HTML5Backend}>
+        <DropZoneComponent {...props} />
+    </DndProvider>
+);
+
+export default DropZoneComponentWithDndProvider;

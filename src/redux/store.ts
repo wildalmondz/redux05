@@ -5,6 +5,7 @@ import authReducer from './features/auth-slice';
 import counterReducer from './features/counter-slice'; // Import the new slice
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
+
 const rootReducer = combineReducers({
     authReducer,
     counterReducer,

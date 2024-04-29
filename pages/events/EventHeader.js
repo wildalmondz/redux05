@@ -13,7 +13,7 @@ import SquareList from './SquareList';
 import squareDetails from './squareDetails.json';
 import ContainerNoDivision from './containerNoDivision';
 import PicksComments from "./PicksComments";
-import HeadsUp from "./headsup";
+import HeadsUp from "./HeadsUp";
 import TextField from "@mui/material/TextField";
 import {useRouter} from "next/router";
 import PathDisplay from "./PathDisplay";
@@ -147,13 +147,25 @@ const EventHeader = ({
     const [hasChanges, setHasChanges] = useState(false);
     const [textFieldValue, setTextFieldValue] = useState('');
 
+    const [foundAlmonds, setFoundAlmonds] = useState(0);
+
     const router = useRouter();
 
-    if ((almonds) && (almondList === null)) {
+    if ((almonds && foundAlmonds === 0) && (almondList === null)) {
+        // Access almonds array properties here
         setAlmonds(almonds);
+        setFoundAlmonds(1);
     }
 
-    if ((squareDetails) && (squareDetails.squares) && (divisions === null)) {
+    /*
+    if ((almonds) && (almondList === null)) {
+       // setAlmonds(almonds);
+    }
+
+     */
+
+    //if ((squareDetails && squareDetails.length > 0) && (squareDetails.squares) && (divisions === null)) {
+    if ((squareDetails && squareDetails.length > 0) && (squareDetails.squares) && (divisions === null)) {
         setDivision(squareDetails.squares.withDivision);
     }
 
@@ -182,6 +194,7 @@ const EventHeader = ({
         } else (console.log('No dropped item'));
 
         try {
+
             // Perform the asynchronous operation (e.g., axios request)
             const res = await axios.post(`http://localhost:4500/pick/setpick_v3/null/${gameId}/${foundUserId}/${item.name}/${item.squareId}`);
 

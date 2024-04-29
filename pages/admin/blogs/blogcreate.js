@@ -34,7 +34,7 @@ export default function TinyMCE() {
 
     const [id, setId] = useState(0);
     const [blogTitle, setBlogTitle] = useState('');
-    const [blogStatus, setBlogStatus] = useState('inactive');
+    const [blogStatus, setBlogStatus] = useState('');
     const [blogLikes, setBlogLikes] = useState('');
     const [blogImage, setBlogImage] = useState('');
     const [textFieldValue, setTextFieldValue] = useState('');
@@ -101,7 +101,7 @@ export default function TinyMCE() {
             (textFieldValue === '') ||
             (textFieldValue === undefined) ||
             (textFieldValue == null)) {
-            alert('Blog Title and Text Required');
+            alert('Blog_old Title and Text Required');
         }
         else {
             try {
