@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
-import InviteBlog from './InviteBlog';
+import InviteBlog from '../../pages/blogs/InviteBlog';
 import {useRouter} from "next/router";
 import fixDate from "../../src/lib/fixDate";
 import axios from "axios";
@@ -157,8 +157,8 @@ function NextCo(props) {
     }
 }
 
-const BlogHeader = ({ companyDetails, slugListArray, blogListArray, blogContent, urlParse, currentId, likeCount, setParametersDefined, setUrlParse, indexFind, setIndexFind }) => {
-    let dataArray;
+const BlogHeader = ({ companyDetails, slugListArray, blogListArray, blogContent, urlparse, currentId, likeCount }) => {
+
     let companyInfo;
 
     if (companyDetails) {
@@ -177,38 +177,17 @@ const BlogHeader = ({ companyDetails, slugListArray, blogListArray, blogContent,
     const [disabledBlogNext, setDisableBlogNext] = useState(false);
     const [disabledBlogPrev, setDisableBlogPrev] = useState(true);
     const [foundDirection, setFoundDirection] = useState(false);
+    const [blogTitle, setBlogTitle] = useState('Loading...');
     const [prettyDate, setPrettyDate] = useState('Loading...');
     const [hasLiked, setHasLiked] = useState(false);
-    const [foundFirst, setFoundFirst] = useState(false);
-    const [targetCompany, setTargetCompany] = useState(0);
-
-
-
-
-
-    if (blogListArray.blogs) {
-        dataArray = blogListArray.blogs;
-    }
+    const dataArray = blogListArray.blogs;
     let startId = currentId;
 
     startId = Number(startId);
+
+
     const index = findIndexById(dataArray, startId);
 
-    if (foundFirst === false) {
-        //alert('URL Parse! ' + JSON.stringify(urlParse))
-
-        /*
-        setStructuredUrl({
-            type: companyInfo.type || '',
-            slug: companyInfo.slug  || '',
-            post: blogListArray.blogs[0].id,
-        });
-
-         */
-        setFoundFirst(true);
-    }
-
-    // if (index != 0) { setFoundFirst(false) }
 
     if ((index !== null) && (foundDirection === false)) {
         console.log(` The next element with id ${startId} is found at index ${index}`);
@@ -236,7 +215,7 @@ const BlogHeader = ({ companyDetails, slugListArray, blogListArray, blogContent,
     useEffect(() => {
         const fetchData = async () => {
 
-            //console.log(`Like Count: ${likeCount} type is ${typeof likeCount}`)
+            console.log(`Like Count: ${likeCount} type is ${typeof likeCount}`)
             if (typeof likeCount === "object") {
                 console.log(JSON.stringify(likeCount))
                 setLikes(null);
@@ -251,21 +230,8 @@ const BlogHeader = ({ companyDetails, slugListArray, blogListArray, blogContent,
             }
 
             if (idNext === true) {
-                try {
-                    console.log(`/blogs/${structuredUrl.type}/${structuredUrl.slug}`);
-                    setParametersDefined(false);
-                    alert('Next index is: ' + '/'
-                        + slugListArray.slugs[companyIndex].type + '/'
-                        + slugListArray.slugs[companyIndex].slug);
-
-                    alert('targetCompany' + targetCompany);
-                    alert('/blogs/' + slugListArray.slugs[targetCompany].type + '/' + slugListArray.slugs[targetCompany].slug + ' @ index ' + companyIndex + ' slugs [' + JSON.stringify(slugListArray.slugs) + ' ]');
-                    router.push(`/blogs/${urlParse.type}/${urlParse.slug}`);
-                    setIdNext(false)
-                } catch (error) {
-                    // Handle errors if any
-                    console.error('Error fetching company:', error);
-                }
+                router.push(`/blogs/${structuredUrl.type}/${structuredUrl.slug}`);
+                setIdNext(idNext = false);
             }
 
             if (blogListArray && blogListArray.blogs.length <= 1){
@@ -274,23 +240,22 @@ const BlogHeader = ({ companyDetails, slugListArray, blogListArray, blogContent,
             }
 
             if (blogNext === true) {
-                //alert('Blog Next is... ' + blogNext);
                 try {
                     router.push(`/blogs/${structuredUrl.type}/${structuredUrl.slug}/${structuredUrl.post}`);
-                    setBlogNext(false)
+                    setBlogNext(false);
                 } catch (error) {
                     // Handle errors if any
                     console.error('Error fetching blog:', error);
                 }
             }
-            if (blogListArray && blogListArray.blogs && blogListArray.blogs[index]) {
+            if (blogListArray && blogListArray.blogs) {
                 setPrettyDate(fixDate(blogListArray.blogs[index].createdAt, true));
             }
         };
 
         // Call the async function immediately
         fetchData();
-    }, [idNext, blogNext, likeCount, companyIndex]);
+    }, [idNext, blogNext, likeCount]);
 
     const handleLike = async () => {
         let parsedLike;
@@ -349,31 +314,8 @@ const BlogHeader = ({ companyDetails, slugListArray, blogListArray, blogContent,
         setDisableBlogPrev(true);
         setDisableBlogNext(false);
         setLikes(null);
-        setCompanyIndex(companyIndex + 1);
-        setTargetCompany((slugListArray.slugs.findIndex(x => x.slug === urlParse.slug)) + 1);
 
-        // let indexFind;
-        // indexFind = slugListArray.slugs.findIndex(x => x.slug === urlParse.slug);
-        setIndexFind(slugListArray.slugs.findIndex(x => x.slug === urlParse.slug));
-
-        // this may need a check to ensure another array position is available
-        setUrlParse({
-            type: slugListArray.slugs[indexFind + 1].type,
-            slug: slugListArray.slugs[indexFind + 1].slug,
-            post: undefined,
-        });
-
-        // alert('URL Parse @BlogHeader start! ' + '/' + slugListArray.slugs[indexFind + 1].type + '/' + slugListArray.slugs[indexFind + 1].slug);
-        // alert('@BlogHeader!' + slugListArray.slugs[indexFind + 1].slug + ' next index: [ ' + (indexFind + 1) + ' ]indexFind: => '  + indexFind + 'of ' + slugListArray.slugs.length);
-
-        setIndexFind(indexFind + 1);
-        // alert('toggleNext!' + JSON.stringify(urlparse) + '[ Index find: ' + indexFind + ' ]' + 'slugs: ' + JSON.stringify(slugListArray.slugs));
-        setCompanyIndex(companyIndex + 1);
-
-        // alert('\n\nHere is next companyIndex: ['+ indexFind + '] of ' + (slugListArray.slugs.length - 1) + '\n\n');
-        companyInfo = '';
-
-        alert('URL Parse @BlogHeader start! ' + '/' + slugListArray.slugs[indexFind + 1].type + '/' + slugListArray.slugs[indexFind + 1].slug);
+        console.log('Here next '+ companyIndex + ' of ' + (slugListArray.slugs.length - 1));
 
         setDisableCoPrev(false);
         setBlogIndex(0);
@@ -388,15 +330,14 @@ const BlogHeader = ({ companyDetails, slugListArray, blogListArray, blogContent,
                 slug: slugListArray.slugs[companyIndex + 1].slug || '',
                 post: undefined,
             });
-            setIdNext(true);
+            setIdNext(idNext = true);
+
         }
 
-
-        else if (indexFind === slugListArray.slugs.length - 1) { // keep progressing unless it is the last element
-
+        else if (companyIndex === slugListArray.slugs.length - 1) { // keep progressing unless it is the last element
             // set to disabled
             setDisableCoNext(true);
-            setIdNext(true);
+            setIdNext(idNext = true);
         }
     }
 
@@ -408,27 +349,23 @@ const BlogHeader = ({ companyDetails, slugListArray, blogListArray, blogContent,
         setDisableBlogNext(false);
 
 
-        // const dataArray = blogListArray.blogs;
-        let targetId;
-
-        if (blogListArray.blogs.length) {
-            targetId = blogListArray.blogs[index].id;
-        }
+        const dataArray = blogListArray.blogs;
+        const targetId = blogListArray.blogs[index].id;
 
         let prevIndex = findIndexById(dataArray, targetId);
 
 
         if ((index !== null) && ((prevIndex -1) > 0)){
-            //console.log(` Index Exists: The previous element  ${blogListArray.blogs[prevIndex -1].id} of id ${targetId}
-            // is found at index ${prevIndex - 1}. blog index is ${blogIndex}`);
+            console.log(` Index Exists: The previous element  ${blogListArray.blogs[prevIndex -1].id} of id ${targetId} 
+            is found at index ${prevIndex - 1}. blog index is ${blogIndex}`);
 
             if (index > 0) {
                 console.log(`${index} is greater than zero so set the blogIndex from ${blogIndex} to ${index}`);
                 setBlogIndex(index);
             }
             else if (blogIndex > 0) {
-                //console.log(`
-                //index not null blogIndex ${blogIndex} is greater than zero so set the blogIndex from ${blogIndex} to ${index}`);
+                console.log(`
+                index not null blogIndex ${blogIndex} is greater than zero so set the blogIndex from ${blogIndex} to ${index}`);
                 setBlogIndex(blogIndex - 1);
             }
         } else if ((prevIndex - 2) < 0) {
@@ -439,36 +376,36 @@ const BlogHeader = ({ companyDetails, slugListArray, blogListArray, blogContent,
         let moveValue = 1;
 
         if ((blogIndex <= 0) && (index <= 0)) {
-            // console.log('blog index is ' + blogIndex + ' moveValue ' + moveValue + ' index ' + index + ' blog prev ID ' + blogPrev);
+            console.log('blog index is ' + blogIndex + ' moveValue ' + moveValue + ' index ' + index + ' blog prev ID ' + blogPrev);
             setDisableBlogPrev(true);
         }
 
         if (blogIndex === blogListArray.blogs.length){
-            // console.log(blogIndex + ' blog index is equal to length ' + blogIndex.blogs.length + ' moveValue ' + moveValue);
+            console.log(blogIndex + ' blog index is equal to length ' + blogIndex.blogs.length + ' moveValue ' + moveValue);
             moveValue = 2;
         }
 
         if ((blogListArray.blogs[index - 1]) && (blogListArray.blogs[index - 1].id)) {
-            //console.log('Index at blogIndex: ' + index + ' move value ' + moveValue);
-
+            console.log('Index at blogIndex: ' + index + ' move value ' + moveValue);
             setStructuredUrl({
-                type: companyInfo.type || '',
-                slug: companyInfo.slug  || '',
+                type: urlparse.type || '',
+                slug: urlparse.slug || '',
                 post: blogListArray.blogs[index - moveValue].id,
             });
+            console.log(JSON.stringify(structuredUrl));
+            setBlogTitle(blogListArray.blogs[index - moveValue].id);
             setBlogNext(true);
 
         } else if (index) {
-            // console.log('Index exists: ' + index);
+            console.log('Index exists: ' + index);
             setBlogIndex(index);
-            // console.log('Blog Index: ' + blogIndex);
+            console.log('Blog Index: ' + blogIndex);
 
             setStructuredUrl({
-                type: companyInfo.type || '',
-                slug: companyInfo.slug  || '',
+                type: urlparse.type || '',
+                slug: urlparse.slug || '',
                 post: blogListArray.blogs[index - 1].id,
             });
-
         }
 
         setBlogNext(true);
@@ -478,35 +415,30 @@ const BlogHeader = ({ companyDetails, slugListArray, blogListArray, blogContent,
 
     const toggleNextBlog = (event) => {
         event.preventDefault();
-
-
-        setBlogNext(true);
         setDisableBlogNext(false);
 
         if (likeCount !== null) {
             setLikes(likeCount);
         }
 
-        //const dataArray = blogListArray.blogs;
-        let targetId;
-
-        if (blogListArray.blogs.length) {
-            targetId = blogListArray.blogs[index].id;
-        }
+        const dataArray = blogListArray.blogs;
+        const targetId = blogListArray.blogs[index].id;
 
         let nextIndex = findIndexById(dataArray, targetId);
 
         console.log(`here is the end of nextIndex:  ${nextIndex}  blogsListArray: ${blogListArray.blogs.length}`);
 
-
-        if ((blogListArray && blogListArray.blogs) && (nextIndex + 2) == blogListArray.blogs.length + 1) { // probably needs to be the length
-            console.log(`disable! This is the end of next elements ${nextIndex + 2}  is equal to ${blogListArray.blogs.length + 1}`);
+        if ((nextIndex + 2) == blogListArray.blogs.length) { // probably needs to be the length
+            console.log(`disable! This is the end of next elements ${nextIndex + 2}  is equal to ${blogListArray.blogs.length}`);
             setDisableBlogNext(true);
         }
 
-        if ((blogListArray && blogListArray.blogs) && (index !== null) && ((nextIndex + 2) < blogListArray.blogs.length)){
+        if ((index !== null) && ((nextIndex + 2) < blogListArray.blogs.length)){
             console.log(` Index Exists: The previous element  ${blogListArray.blogs[nextIndex + 1].id} of id ${targetId} 
             is found at index ${nextIndex + 1}. blog index is ${index}`);
+
+
+
 
             if ((nextIndex + 1) < blogListArray.blogs.length) { // probably needs to be the length
                 console.log(`${index} is less than the length so set the blogIndex from ${blogIndex} to ${index}`);
@@ -526,24 +458,23 @@ const BlogHeader = ({ companyDetails, slugListArray, blogListArray, blogContent,
             setDisableBlogPrev(true);
         }
 
-        if ((blogListArray && blogListArray.blogs) && (blogIndex === blogListArray.blogs.length)) {
+        if (blogIndex === blogListArray.blogs.length){
             console.log(blogIndex + ' blog index is equal to length ' + blogIndex.blogs.length + ' moveValue ' + moveValue);
             moveValue = 2; // move back to the previous blog should user navigate to previous
         }
 
-        if ((blogListArray && blogListArray.blogs) && (blogListArray.blogs[index + 1]) && (blogListArray.blogs[index + 1].id)) {
+        if ((blogListArray.blogs[index + 1]) && (blogListArray.blogs[index + 1].id)) {
             console.log('CompanyIndex at blogIndex: ' + companyIndex + ' index ' + index + ' move value ' + moveValue);
 
             setStructuredUrl({
                 type: companyInfo.type || '',
-                slug: companyInfo.slug  || '',
+                slug: urlparse.slug  || '',
                 post: blogListArray.blogs[index + moveValue].id,
             });
-
-           // setBlogTitle(blogListArray.blogs[index + moveValue].id);
+            setBlogTitle(blogListArray.blogs[index + moveValue].id);
             setDisableBlogPrev(false);
             setBlogNext(true);
-        } else if ((blogListArray && blogListArray.blogs) && (index) && (blogListArray.blogs[index + moveValue])) {
+        } else if ((index) && (blogListArray.blogs[index + moveValue])) {
             // unreachable code?
             console.log('Index exists: ' + index);
             setBlogIndex(index);
@@ -557,7 +488,6 @@ const BlogHeader = ({ companyDetails, slugListArray, blogListArray, blogContent,
             setBlogNext(true);
         }
         else { // unable to find the next post
-            console.log('We ended up here!  Index is: ' + index + 'blogs list => ' + blogListArray.blogs[index + moveValue]);
             setBlogNext(false);
             setDisableBlogNext(true);
         }
@@ -597,7 +527,7 @@ const BlogHeader = ({ companyDetails, slugListArray, blogListArray, blogContent,
                                 </StyledItem>
                             </Grid>
                             <Grid item xs={6}>
-                                <Item><InviteBlog urlParse={urlParse}/></Item>
+                                <Item><InviteBlog urlParse={urlparse}/></Item>
                             </Grid>
                         </Grid>
                         <Grid item xs={6}>
@@ -630,10 +560,10 @@ const BlogHeader = ({ companyDetails, slugListArray, blogListArray, blogContent,
                                     <div id='blog-header'>
                                         {blogListArray && blogListArray.blogs && index ?
                                             <div>
-                                                <div id='blog-title' style={{fontSize: '1.25em'}}><strong>{blogListArray.blogs[index].title}</strong></div>
-                                                <div id='blog-author'><strong>By: </strong><strong>{blogListArray.blogs[index].firstname}
-                                                    { ' ' }   {blogListArray.blogs[index].lastname}</strong></div>
-                                                <div id='blog-date'>{prettyDate}</div>
+                                            <div id='blog-title' style={{fontSize: '1.25em'}}><strong>{blogListArray.blogs[index].title}</strong></div>
+                                            <div id='blog-author'><strong>By: </strong><strong>{blogListArray.blogs[index].firstname}
+                                                { ' ' }   {blogListArray.blogs[index].lastname}</strong></div>
+                                            <div id='blog-date'>{prettyDate}</div>
                                             </div>
                                             : null}
                                     </div>
@@ -662,11 +592,7 @@ const BlogHeader = ({ companyDetails, slugListArray, blogListArray, blogContent,
                                 textAlign: 'justify',  // Justify text for a cleaner look
                                 lineHeight: '1.25',  // Set line height for better readability
                             }}>
-                                {blogListArray && blogListArray.blogs && index ?
-                                        <div style={{minHeight: '30em'}} dangerouslySetInnerHTML={{ __html: blogListArray.blogs[index].blog }} /> :
-                                blogContent ?
-                                    <div style={{minHeight: '30em'}} dangerouslySetInnerHTML={{ __html: blogContent }} />
-                                    :   <p>Loading...</p>}
+                                <div style={{minHeight: '30em'}} dangerouslySetInnerHTML={{ __html: blogContent }} />
                                 <BlogArrows>
                                         <span id='nextCursor'>
                                             <PrevCo toggle={(event) => togglePrevBlog(event)}
@@ -689,19 +615,6 @@ const BlogHeader = ({ companyDetails, slugListArray, blogListArray, blogContent,
 };
 
 export default BlogHeader;
-
-/*
-a = [
-  {prop1:"abc",prop2:"qwe"},
-  {prop1:"bnmb",prop2:"yutu"},
-  {prop1:"zxvz",prop2:"qwrq"}];
-
-index = a.findIndex(x => x.prop2 ==="yutu");
-
-console.log(index);
- */
-
-
 
 // add code above to show articles by likes?
 /*

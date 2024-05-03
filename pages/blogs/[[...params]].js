@@ -8,62 +8,90 @@ function Blogs() {
     // set params to an empty array to avoid build errors
     const { params = [] } = router.query;
 
-    const [results, setResults] = useState('Loading...');
+    const [results, setResults] = useState('Loading blog content...');
     const [foundCompanyBlog, setFoundCompanyBlog] = useState(0);
     const [foundBlog, setFoundBlog] = useState(0);
-    const [blogContent, setBlogContent] = useState(0);
+    const [blogContent, setBlogContent] = useState('');
     const [blogLikes, setBlogLikes] = useState(0);
     const [companyDetails, setCompanyDetails] = useState('');
     const [slugList, setSlugList] = useState('');
     const [blogList, setBlogList] = useState('');
-    const [structuredUrl, setStructuredUrl] = useState('');
+    const [structuredUrl, setStructuredUrl] = useState({});
+    const [urlParse, setUrlParse] = useState({});
+    const [parametersDefined, setParametersDefined] = useState(false);
+    const [switchCompany, setSwitchCompany] = useState(false);
+    const [indexFind, setIndexFind] = useState(0);
 
-    //
+    console.log('URL Parse!! ' + JSON.stringify(urlParse));
+
+    if ((parametersDefined === false) && (params[2])) {
+        setUrlParse({
+            type: params[0] || '',
+            slug: params[1] || undefined,
+            post: params[2] || undefined,
+        });
+        setFoundCompanyBlog(0);
+        setParametersDefined(true);
+    }
+
+    console.log('1. Parameters defined?' + parametersDefined +
+        'Structured URL [ ' + JSON.stringify(urlParse) +
+        ' ] =>' + params.length);
+    console.log('Switch company?' + switchCompany);
+
+    if (switchCompany === true) {
+        setUrlParse({
+            type: params[0] || '',
+            slug: params[1] || undefined,
+            post: params[2] || undefined,
+        });
+        console.log('\n\n\nSwitchCompany\n\n\n' + JSON.stringify(urlParse) + '\n\n\n\n\n');
+        setSwitchCompany(false);
+    }
+
+
     useEffect(() => {
         if (params.length === 2 && foundCompanyBlog === 0) {
+            console.log('2. Parameters defined?' + parametersDefined + 'Structured URL [ ' + JSON.stringify(urlParse) + ' ] =>' + params.length);
+
             const getCompanyBlogs = async () => {
                 try {
                     const findCompanyBlog = await blogHandler(`http://localhost:4500/blog/v4/${params[0]}/${params[1]}`);
-                    setResults(findCompanyBlog);
+                    // console.log('3. Company data returned: ' + JSON.stringify(findCompanyBlog));
+                    setResults(findCompanyBlog);  // has the company and blog list only
                     setFoundCompanyBlog(1);
+                    setFoundBlog(0);
                 } catch (error) {
                     console.error('Error fetching company blogs:', error.message);
                 }
             };
             getCompanyBlogs();
         }
-    }, [params, foundCompanyBlog]);
+    }, [params, foundCompanyBlog, switchCompany]);
 
     // user provided a post id or we were able to find one
     useEffect(() => {
         if ((params.length === 3) && (foundBlog === 0)) {
+            setBlogContent('Retrieving blog...');
 
-            setStructuredUrl({
-                type: params[0] || '',
-                slug: params[1] || undefined,
-                post: params[2] || undefined,
-            });
 
             const getCompanyBlogs = async () => {
                 try {
                     const findBlogData = await blogHandler(`http://localhost:4500/blog/post/${params[0]}/${params[1]}/${params[2]}`);
-                    setResults(findBlogData);
+                    // setResults(findBlogData); // has the full blog post details
                     setFoundBlog(1);
-
-
-                    // const blogContent = findBlogData[0]?.blog || null;
-
                     if (findBlogData[0]?.blog) { setBlogContent(findBlogData[0]?.blog) };
                     if (findBlogData[0]?.likes) { setBlogLikes(findBlogData[0]?.likes) };
-                    console.log('Find blog data!' + JSON.stringify(findBlogData));
+                    //console.log('Find blog data!' + JSON.stringify(findBlogData));
 
                     const blogData = await blogHandler(`http://localhost:4500/blog/v2/${params[0]}/${params[1]}`);
 
-                    if (blogData) {
+                    //if (blogData) {
+                       // alert('Blog Data Slugs: [ ' + JSON.stringify(blogData.find((entry) => entry.slugs)) + ']');
                         setCompanyDetails(blogData.find((entry) => entry.company));
                         setSlugList(blogData.find((entry) => entry.slugs));
                         setBlogList(blogData.find((entry) => entry.blogs));
-                    };
+                    //};
 
                 } catch (error) {
                     console.error('Error fetching company blogs:', error.message);
@@ -73,20 +101,9 @@ function Blogs() {
         }
     }, [params, foundCompanyBlog, foundBlog, blogContent]);
 
-    /*
-                <h1>
-                Viewing blog article for type [{params[0]}] slug [{params[1]}] article [{params[2]}]
-            </h1>
-                <br/>
-                <span>Likes: [ {blogLikes} ]</span>
-                <br/>
-            <p>
-                {blogContent}
-            </p>
-     */
-
-
     if (params.length === 3) {
+        // alert('Length is 3');
+        //setParametersDefined(false);
         return (
             <>
                 <BlogHeader
@@ -94,27 +111,39 @@ function Blogs() {
                     slugListArray={slugList}
                     blogListArray={blogList}
                     blogContent={blogContent}
-                    urlparse={structuredUrl}
-                    currentId={structuredUrl.post}
+                    urlParse={urlParse}
+                    currentId={params[2]}
                     likeCount={blogLikes}
+                    switchCompany={switchCompany}
+                    setParametersDefined={setParametersDefined}
+                    setSwitchCompany={setSwitchCompany}
+                    setUrlParse={setUrlParse}
+                    setIndexFind={setIndexFind}
+                    indexFind={indexFind}
                 />
             </>
         );
-    } else if (params.length === 2 && foundCompanyBlog === 0) {
+    }
+    else if (params.length === 2 && foundCompanyBlog === 0) {
+
+        // alert('params length 2  foundCompanyBlog 0' + '[data?] ' + JSON.stringify(blogList) + ' ]');
+        // setParametersDefined(false);
         return (
             <>
                 <h1>Viewing blogs for type [{params[0]}] slug [{params[1]}]</h1>
+                <p>Parameters length is 3</p>
                 <p>Loading...</p>
             </>
         );
-    } else if (params.length === 2 && foundCompanyBlog === 1) {
+    }
+    else if (params.length === 2 && foundCompanyBlog === 1) {
 
+        // alert('params length 2  foundCompanyBlog 0');
         let data;
+        if (results) { data = results; }
 
-        if (results && results[0]) { data = results; }
-
-        if ((data && data.results[0].id) && (typeof data.results[0].id == 'number')) {
-            //alert('redirect here!')
+        if ((data && data.results) && (typeof data.results[0].id == 'number')) {
+            //alert('redirect here! [' + JSON.stringify(slugList) + ' ]');
             router.push(`/blogs/${params[0]}/${params[1]}/${data.results[0].id}`);
         }
 
@@ -122,12 +151,19 @@ function Blogs() {
             <>
                 <h1>Viewing blogs for type [{params[0]}] slug [{params[1]}]</h1>
                 <p>{JSON.stringify(results)}</p>
+                <p>Parameters length is 2 found the latest company blog</p>
                 <h2>Found Company Blog? {foundCompanyBlog}</h2>
-                {data ? <h3>{data.results[0].id}</h3> : null}
+                {data.results ? <h3 style={{color: 'red'}}>{data.results[0].id}</h3> : null}
             </>
         );
-    } else if (params.length === 1) {
-        return <h1>Viewing blogs for type {params[0]}</h1>;
+    }
+    else if (params.length === 1) {
+        return (
+        <>
+        <h1>Viewing blogs for type {params[0]}</h1>
+            <p>Design for entire category</p>
+        </>
+        )
     }
 
     return (
@@ -139,92 +175,3 @@ function Blogs() {
 }
 
 export default Blogs;
-
-
-/*
-export async function getStaticPaths({ params }) {
-    let companyDetails = {};
-    let slugListArray = {};
-    let blogListArray = {};
-
-    let results;
-    let blogContent;
-    let likeCount;
-    let findBlog = null;
-    let idFound = false;
-
-    const { blogs } = params;
-    const structuredUrl = {
-        type: blogs[0] || '',
-        slug: blogs[1] || undefined,
-        post: blogs[2] || undefined,
-    };
-
-    if (!structuredUrl.slug) {
-        console.log('No slug');
-        return {
-            notFound: true,
-        };
-    }
-
-    if (!structuredUrl.post) {
-        // user did not have a particular blog id to provide
-        console.log('No post');
-
-        findBlog = await blogHandler(`http://localhost:4500/blog/v4/${structuredUrl.type}/${structuredUrl.slug}`);
-        console.log(JSON.stringify('This is it! ' + JSON.stringify(findBlog)));
-
-        const extractedValue = findBlog.results[0].id || null;
-        // console.log(extractedValue); // Output: 65
-        structuredUrl.post = extractedValue;
-
-        //set a state that the id is found that redirects
-        results = await blogHandler(`http://localhost:4500/blog/post/${structuredUrl.type}/${structuredUrl.slug}/${extractedValue}`);
-        idFound = true;
-        blogContent = results[0]?.blog || null;
-        likeCount = results[0]?.likes|| null;
-
-        console.log('likeCount' + likeCount);
-    }
-
-    try {
-        // console.log(`Here at blogData`);
-        const blogData = await blogHandler(`http://localhost:4500/blog/v2/${structuredUrl.type}/${structuredUrl.slug}/`);
-
-        companyDetails = blogData.find((entry) => entry.company);
-        slugListArray = blogData.find((entry) => entry.slugs);
-        blogListArray = blogData.find((entry) => entry.blogs);
-    } catch (error) {
-        console.error('Error fetching blog data:', error.message);
-    }
-
-    results = await blogHandler(`http://localhost:4500/blog/post/${structuredUrl.type}/${structuredUrl.slug}/${structuredUrl.post}`);
-    blogContent = results[0]?.blog || undefined;
-    likeCount = results[0]?.likes|| null;
-
-    if (likeCount != null) {
-        console.log('likeCount: ' + likeCount);
-    }
-
-    if (!blogContent) {
-        console.log('No post found for article ' + structuredUrl.post);
-
-        return {
-            notFound: true,
-
-        };
-    }
-
-    return {
-        props: {
-            blogContent,
-            structuredUrl,
-            companyDetails,
-            slugListArray,
-            blogListArray,
-            idFound,
-            likeCount,
-        },
-    };
-}
- */

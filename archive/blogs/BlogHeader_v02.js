@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
-import InviteBlog from './InviteBlog';
+import InviteBlog from '../../pages/blogs/InviteBlog';
 import {useRouter} from "next/router";
 import fixDate from "../../src/lib/fixDate";
 import axios from "axios";
